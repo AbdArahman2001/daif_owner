@@ -1,7 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.daif.customer">
-   <application
-        android:label="Daif Customer"
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+        android:label="Daif Owner"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

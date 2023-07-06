@@ -1,4 +1,4 @@
-import 'package:daif_customer/localization/my_localizations.dart';
+import 'package:daif_owner/localization/my_localizations.dart';
 import 'package:flutter/cupertino.dart';
 
 class DataConverter {

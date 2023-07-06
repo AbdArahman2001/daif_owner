@@ -168,7 +168,9 @@ TextStyle style_400_16(Color color) {
 TextStyle style_400_14(Color color) {
   return getRegularStyle(fontSize: FontSize.s14, color: color);
 }
-
+TextStyle style_400_13(Color color) {
+  return getRegularStyle(fontSize: FontSize.s13, color: color);
+}
 TextStyle style_400_12(Color color) {
   return getRegularStyle(fontSize: FontSize.s12, color: color);
 }

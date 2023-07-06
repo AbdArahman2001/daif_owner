@@ -459,24 +459,24 @@
 //   StaticUrls(
 //       {String contactUs,
 //         String brands,
-//         String categories,
+//         String my_places,
 //         String customerAccount}) {
 //     this._contactUs = contactUs;
 //     this._brands = brands;
-//     this._categories = categories;
+//     this._categories = my_places;
 //     this._customerAccount = customerAccount;
 //   }
 //
 //   String get contactUs => _contactUs;
 //   String get brands => _brands;
-//   String get categories => _categories;
+//   String get my_places => _categories;
 //   String get customerAccount => _customerAccount;
 //
 //
 //   StaticUrls.fromJson(Map<String, dynamic> json) {
 //     _contactUs = json['contact_us'];
 //     _brands = json['brands'];
-//     _categories = json['categories'];
+//     _categories = json['my_places'];
 //     _customerAccount = json['customer_account'];
 //   }
 //
@@ -484,7 +484,7 @@
 //     final Map<String, dynamic> data = new Map<String, dynamic>();
 //     data['contact_us'] = this._contactUs;
 //     data['brands'] = this._brands;
-//     data['categories'] = this._categories;
+//     data['my_places'] = this._categories;
 //     data['customer_account'] = this._customerAccount;
 //     return data;
 //   }

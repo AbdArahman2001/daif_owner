@@ -1,5 +1,5 @@
-import 'package:daif_customer/utill/styles_manager.dart';
-import 'package:daif_customer/view/basewidget/button/custom_back_button.dart';
+import 'package:daif_owner/utill/styles_manager.dart';
+import 'package:daif_owner/view/basewidget/button/custom_back_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';

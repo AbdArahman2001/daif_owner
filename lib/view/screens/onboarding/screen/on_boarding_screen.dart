@@ -1,13 +1,14 @@
-import 'package:daif_customer/localization/my_localizations.dart';
-import 'package:daif_customer/utill/assets_manager.dart';
-import 'package:daif_customer/utill/styles_manager.dart';
-import 'package:daif_customer/utill/values_manager.dart';
-import 'package:daif_customer/view/basewidget/empty_app_bar.dart';
-import 'package:daif_customer/view/screens/account/screen/login_and_singup_screen.dart';
-import 'package:daif_customer/view/screens/onboarding/screen/single_on_boarding_view.dart';
+import 'package:daif_owner/controller/on_boarding_controller.dart';
+import 'package:daif_owner/localization/my_localizations.dart';
+import 'package:daif_owner/utill/assets_manager.dart';
+import 'package:daif_owner/utill/styles_manager.dart';
+import 'package:daif_owner/utill/values_manager.dart';
+import 'package:daif_owner/view/basewidget/empty_app_bar.dart';
+import 'package:daif_owner/view/screens/onboarding/screen/single_on_boarding_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 import '../../../../utill/color_manager.dart';
 import '../../../basewidget/button/custom_back_button.dart';
@@ -20,20 +21,6 @@ class OnBoardingScreen extends StatefulWidget {
 }
 
 class _OnBoardingScreenState extends State<OnBoardingScreen> {
-  late PageController pageController;
-  int index = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    pageController = PageController();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    pageController.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -56,111 +43,102 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
       ImageAssets.onBoardingImg3,
       ImageAssets.onBoardingImg4,
     ];
-    return Scaffold(
-      appBar: const EmptyAppBar(),
-      body: Stack(
-        alignment: Alignment.bottomCenter,
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+    return GetBuilder<OnBoardingController>(
+      builder: (controller){
+        return Scaffold(
+          appBar: const EmptyAppBar(),
+          body: Stack(
+            alignment: Alignment.bottomCenter,
             children: [
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: 12.w),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    CustomBackButton(
-                      onPressed: goPreviousPage,
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: 12.w),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        CustomBackButton(
+                          onPressed: controller.goPreviousPage,
+                        ),
+                        ElevatedButton(
+                          onPressed:
+                            controller.skip,
+                          style: ElevatedButton.styleFrom(
+                              padding: EdgeInsets.zero,
+                              backgroundColor: ColorManager.grey1,
+                              fixedSize: Size(90.w, 37.h),
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(19.r))),
+                          child: Text(locale.skip),
+                        )
+                      ],
                     ),
-                    ElevatedButton(
-                      onPressed: () {},
-                      child: Text(locale.skip),
-                      style: ElevatedButton.styleFrom(
-                          padding: EdgeInsets.zero,
-                          backgroundColor: ColorManager.grey1,
-                          fixedSize: Size(90.w, 37.h),
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(19.r))),
-                    )
-                  ],
-                ),
-              ),
-              Expanded(
-                child: PageView(
-                  controller: pageController,
-                  onPageChanged: changePage,
-                  children: images
-                      .map((image) => SingleOnBoardingView(
+                  ),
+                  Expanded(
+                    child: PageView(
+                      controller: controller.pageController,
+                      onPageChanged: controller.changePage,
+                      children: images
+                          .map((image) => SingleOnBoardingView(
                           title: titles[images.indexOf(image)],
                           description: descriptions[images.indexOf(image)],
                           imgUrl: image))
-                      .toList(),
-                ),
-              ),
-            ],
-          ),
-          Container(
-            margin: EdgeInsets.only(bottom: 45.h),
-            child: ElevatedButton(
-              onPressed: () {
-                if (index + 1 == titles.length) {
-                  Navigator.of(context).pushReplacement(MaterialPageRoute(
-                      builder: (context) => const LoginAndSingUpScreen()));
-                } else {
-                  pageController.nextPage(
-                      duration: const Duration(milliseconds: 300),
-                      curve: Curves.easeOut);
-                }
-              },
-              style: ElevatedButton.styleFrom(fixedSize: Size(220.w, 60.h)),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  const Expanded(child: SizedBox()),
-                  Text(
-                    index == titles.length - 1 ? locale.login : locale.next,
-                    style: style_500_16(ColorManager.whiteColor),
-                  ),
-                  SizedBox(
-                    width: 60.w,
-                  ),
-                  SizedBox(
-                    width: 42.w,
-                    height: 42.w,
-                    child: OutlinedButton(
-                      onPressed: () => pageController.nextPage(
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.easeOut),
-                      style: OutlinedButton.styleFrom(
-                        padding: EdgeInsets.zero,
-                        backgroundColor: ColorManager.primaryGradient,
-                        shape: RoundedRectangleBorder(
-                          borderRadius:
-                              BorderRadius.circular(ValuesManager.border),
-                        ),
-                      ),
-                      child: const Icon(
-                        Icons.arrow_forward,
-                        color: ColorManager.whiteColor,
-                      ),
+                          .toList(),
                     ),
-                  )
+                  ),
                 ],
               ),
-            ),
-          )
-        ],
-      ),
+              Container(
+                margin: EdgeInsets.only(bottom: 45.h),
+                child: ElevatedButton(
+                  onPressed: () {
+                    controller.controlNavigation(titles.length);
+                  },
+                  style: ElevatedButton.styleFrom(fixedSize: Size(220.w, 60.h)),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      const Expanded(child: SizedBox()),
+                      Text(
+                        controller.index == titles.length - 1 ? locale.login : locale.next,
+                        style: style_500_16(ColorManager.whiteColor),
+                      ),
+                      SizedBox(
+                        width: 60.w,
+                      ),
+                      SizedBox(
+                        width: 42.w,
+                        height: 42.w,
+                        child: OutlinedButton(
+                          onPressed: () {
+                            controller.controlNavigation(titles.length);
+                          },
+                          style: OutlinedButton.styleFrom(
+                            padding: EdgeInsets.zero,
+                            backgroundColor: ColorManager.primaryGradient,
+                            shape: RoundedRectangleBorder(
+                              borderRadius:
+                              BorderRadius.circular(ValuesManager.border),
+                            ),
+                          ),
+                          child: const Icon(
+                            Icons.arrow_forward,
+                            color: ColorManager.whiteColor,
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              )
+            ],
+          ),
+        );
+
+      },
     );
   }
 
-  changePage(int index) {
-    this.index = index;
-    setState(() {});
-  }
 
-  goPreviousPage() {
-    pageController.previousPage(
-        duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
-  }
 }

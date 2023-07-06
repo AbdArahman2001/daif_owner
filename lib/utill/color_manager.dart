@@ -11,14 +11,17 @@ class ColorManager {
  static const grey1 = Color(0xFFC0C0C0);
  static const grey2 = Color(0xFF7B7B7B);
  static const white1 = Color(0xFFF9F9FA);
+ static const white2 = Color(0xFFEFEFEF);
  static const greyTextButton = Color(0xFF696969);
  static const disableColor = Color(0xFFF3F3F5);
  static const errorColor = Color(0xFFF11414);
  static const arrowBackIconColor = Color(0xFF8B97A7);
  static const primaryGradient = Color(0xFFB681FF);
+ static const tabIconColor = Color(0xFFF0EFFF);
  static const dividerColor = Color(0xFF767676);
  static const borderColor = Color(0xFFDFDFDF);
  static const disabledBlackText = Color(0xFF707070);
+ static const unSelectedTextColor = Color(0xFF6F6F6F);
 
 
   // darkColor_lightColor
