@@ -36,7 +36,7 @@ class AuthController extends GetxController {
   final TextEditingController fullNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
     TextEditingController otpController  = TextEditingController();
-  int governorateId =1;
+  String governorateId ="1";
   XFile? profileImage;
 
   // LoginMethod loginMethod = LoginMethod.register;
@@ -87,7 +87,7 @@ class AuthController extends GetxController {
     isLoading = true;
     update();
     ApiResponse apiResponse = await authRepo.sendOtp();
-
+    log("sending otp with token: ${userInfo?.accessToken}");
     if (apiResponse.response != null &&
         apiResponse.response!.statusCode == 200 &&
         apiResponse.response!.data["error"] == false) {

@@ -7,7 +7,7 @@ import '../../../../controller/my_places_controller.dart';
 import '../../../../localization/my_localizations.dart';
 import '../../../basewidget/custom_app_bar.dart';
 import '../widget/places_category_widget.dart';
-
+// Not used yet
 class MyPlacesScreen extends StatelessWidget {
   const MyPlacesScreen({Key? key}) : super(key: key);
 

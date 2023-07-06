@@ -17,12 +17,12 @@ class DioClient {
   static final dioClient = DioClient._();
 
   DioClient._() {
-    token = userInfo?.accessToken;
+
     dio
       ..options.baseUrl = baseUrl
       ..options.headers = {
         "Accept": "application/json",
-        ...userInfo?.getRequestHeaders() ?? {}
+        "Authorization": "Bearer ${userInfo?.accessToken?.split("_").last}"
       }
       ..options.connectTimeout = 60000
       ..options.receiveTimeout = 60000

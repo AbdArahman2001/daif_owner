@@ -5,7 +5,7 @@ import '../../../../utill/color_manager.dart';
 import '../../../../utill/styles_manager.dart';
 class BookingIDWidget extends StatelessWidget {
   const BookingIDWidget({Key? key, required this.id}) : super(key: key);
-final String id;
+final int id;
   @override
   Widget build(BuildContext context) {
     final locale = MyLocalizations.translate(context);

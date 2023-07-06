@@ -50,10 +50,10 @@ class MySharedPref {
   }
 
   UserModel? getUserInfo() {
-    final String? userDateAsString =
+    final String? userDataAsString =
         _sharedPreferences.getString(AppConstants.userInfo);
-    if (userDateAsString == null) return null;
-    return UserModel.fromLocaleJson(jsonDecode(userDateAsString));
+    if (userDataAsString == null) return null;
+    return UserModel.fromLocaleJson(jsonDecode(userDataAsString));
   }
 
 

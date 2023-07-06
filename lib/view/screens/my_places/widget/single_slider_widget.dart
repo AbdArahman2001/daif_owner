@@ -24,20 +24,13 @@ class SingleSliderWidget extends StatelessWidget {
       margin: EdgeInsets.symmetric(horizontal: horizontalMargin),
       child: InkWell(
           onTap: onTap,
-          child: SizedBox(
-            // width: imageWidth,
-            // height: imageHeight,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(borderRadius??16.r),
-              child: Hero(
-                tag: imagePath,
-                child: CachedNetworkImage(
-                  imageUrl: imagePath,
-                  placeholder: (context, _) =>const PlaceHolderWidget(),
-                  errorWidget: (context,_,s)=>const PlaceHolderWidget(),
-                  fit: BoxFit.fill,
-                ),
-              ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(borderRadius??16.r),
+            child: CachedNetworkImage(
+              imageUrl: imagePath,
+              placeholder: (context, _) =>const PlaceHolderWidget(),
+              errorWidget: (context,_,s)=>const PlaceHolderWidget(),
+              fit: BoxFit.fill,
             ),
           )),
     );

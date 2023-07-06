@@ -16,8 +16,8 @@ class AttachmentModel {
 
   factory AttachmentModel.fromMap(Map<String, dynamic> map) {
     return AttachmentModel(
-      id: map['id'] ,
-      path: map['path'],
+      id: map['id']??0 ,
+      path: map['path']??"",
     );
   }
 }

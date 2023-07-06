@@ -1,12 +1,14 @@
+import 'package:daif_owner/data/model/response/service_model.dart';
 import 'package:daif_owner/helper/data_converter.dart';
 import 'package:daif_owner/localization/my_localizations.dart';
 import 'package:daif_owner/utill/color_manager.dart';
+import 'package:daif_owner/view/basewidget/custom_cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SingleServiceWidget extends StatelessWidget {
-  const SingleServiceWidget({Key? key, required this.serviceKey}) : super(key: key);
-  final String serviceKey;
+  const SingleServiceWidget({Key? key, required this.service}) : super(key: key);
+  final ServiceModel service;
 
   @override
   Widget build(BuildContext context) {
@@ -20,12 +22,12 @@ class SingleServiceWidget extends StatelessWidget {
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12.r),
               border: Border.all(color: ColorManager.borderColor)),
-          child: Image.asset("assets/icons/$serviceKey.png"),
+          child: CustomCachedNetworkImage(imageUrl: service.icon,),
         ),
         SizedBox(
           height: 12.h,
         ),
-        Text(DataConverter.key2NameService(context, serviceKey))
+        Text(DataConverter.key2NameService(context, service.icon))
       ],
     );
   }

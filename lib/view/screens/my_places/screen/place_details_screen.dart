@@ -19,20 +19,24 @@ import '../widget/place_images_widget.dart';
 import '../widget/place_services_widget.dart';
 
 class PlaceDetailsScreen extends StatelessWidget {
-  const PlaceDetailsScreen({Key? key})
-      : super(key: key);
+  const PlaceDetailsScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-      return Scaffold(
-        appBar: const EmptyAppBar(
-          height: 0,
-        ),
-        body: GetBuilder<MyPlacesController>(
-          builder: (controller) {
-            return controller.currentChaletAttachments != null &&
-                    controller.currentChalet != null
-                ? Column(
+    return Scaffold(
+      appBar: const EmptyAppBar(
+        height: 0,
+      ),
+      body: GetBuilder<MyPlacesController>(
+        builder: (controller) {
+          return controller.currentChaletAttachments != null &&
+                  controller.currentChalet != null
+              ? Hero(
+                  tag: controller.currentChaletAttachments != null &&
+                          controller.currentChaletAttachments!.isNotEmpty
+                      ? controller.currentChaletAttachments!.first.id
+                      : "",
+                  child: Column(
                     children: [
                       PlaceDetailsHeaderWidget(
                         chalet: controller.currentChalet!,
@@ -52,23 +56,21 @@ class PlaceDetailsScreen extends StatelessWidget {
                                     controller.getSelectedDetailsTabIndex,
                               ),
                               PlaceDetailsWidget(
-                                place: controller.currentChalet!,
-                                dummyDetails: controller.dummyDetails,
-                                services: controller.placeServices,
+                                chalet: controller.currentChalet!,
                               ),
                             ],
                           ),
                         ),
                       )
                     ],
-                  )
-                : Center(
-                    child: CircularProgressIndicator(),
-                  );
-          },
-        ),
-      );
-
+                  ),
+                )
+              : const Center(
+                  child: CircularProgressIndicator(),
+                );
+        },
+      ),
+    );
   }
 }
 

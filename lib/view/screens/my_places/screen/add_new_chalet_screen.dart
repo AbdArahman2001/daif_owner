@@ -61,6 +61,7 @@ class AddNewChaletScreen extends StatelessWidget {
                   height: 10.h,
                 ),
                 TextFormField(
+                  controller: controller.placeNameController,
                   decoration: InputDecoration(hintText: locale.place_name),
                 ),
                 SizedBox(
@@ -100,6 +101,8 @@ class AddNewChaletScreen extends StatelessWidget {
                   height: 10.h,
                 ),
                 TextFormField(
+                  controller: controller.addressController,
+
                   decoration: InputDecoration(hintText: locale.address),
                 ),
                 SizedBox(
@@ -120,6 +123,8 @@ class AddNewChaletScreen extends StatelessWidget {
                             height: 10.h,
                           ),
                           TextFormField(
+                            controller: controller.eveningPriceController,
+
                             decoration: const InputDecoration(hintText: "500"),
                           ),
                         ],
@@ -140,6 +145,7 @@ class AddNewChaletScreen extends StatelessWidget {
                             height: 10.h,
                           ),
                           TextFormField(
+                            controller: controller.morningPriceController,
                             decoration: const InputDecoration(hintText: "600"),
                           ),
                         ],
@@ -155,8 +161,8 @@ class AddNewChaletScreen extends StatelessWidget {
                   style: style_400_16(ColorManager.blackTextColor),
                 ),
                 ChooseServicesWidget(
-                    services: controller.services,
-                    changeServiceValue: controller.changeServiceValue),
+                    allServices: controller.allAvailableServices,
+                    changeServiceStatus: controller.changeServiceStatus, selectedServices: controller.selectedServicesIds,),
                 SizedBox(
                   height: 6.h,
                 ),
@@ -168,6 +174,7 @@ class AddNewChaletScreen extends StatelessWidget {
                   height: 10.h,
                 ),
                 TextFormField(
+                  controller: controller.descriptionController,
                   maxLines: 7,
                   decoration:
                       InputDecoration(hintText: locale.type_description),
@@ -186,6 +193,7 @@ class AddNewChaletScreen extends StatelessWidget {
                   children: [
                     Expanded(
                       child: TextFormField(
+                        controller: controller.pollLengthController,
                         decoration: InputDecoration(hintText: locale.length),
                       ),
                     ),
@@ -194,6 +202,8 @@ class AddNewChaletScreen extends StatelessWidget {
                     ),
                     Expanded(
                       child: TextFormField(
+                        controller: controller.pollWidthController,
+
                         decoration: InputDecoration(hintText: locale.width),
                       ),
                     ),
@@ -206,6 +216,8 @@ class AddNewChaletScreen extends StatelessWidget {
                   children: [
                     Expanded(
                       child: TextFormField(
+                        controller: controller.pollMinHeightController,
+
                         decoration:
                             InputDecoration(hintText: locale.min_height),
                       ),
@@ -215,6 +227,8 @@ class AddNewChaletScreen extends StatelessWidget {
                     ),
                     Expanded(
                       child: TextFormField(
+                        controller: controller.pollMinWidthController,
+
                         decoration:
                             InputDecoration(hintText: locale.max_height),
                       ),
@@ -232,6 +246,8 @@ class AddNewChaletScreen extends StatelessWidget {
                   height: 10.h,
                 ),
                 TextFormField(
+                  controller: controller.videoLinkController,
+
                   decoration: const InputDecoration(
                       hintText: "https://www.youtube.com"),
                 ),
@@ -285,7 +301,7 @@ class AddNewChaletScreen extends StatelessWidget {
                   height: 40.h,
                 ),
                 CustomElevatedButton(
-                    onPressed: () {}, child: Text(locale.save)),
+                    onPressed: controller.createChaletWithAttachments, child: Text(locale.save)),
                 SizedBox(
                   height: 30.h,
                 ),

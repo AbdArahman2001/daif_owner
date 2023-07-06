@@ -1,7 +1,13 @@
+import 'package:daif_owner/data/model/response/booking_time_model.dart';
 import 'package:daif_owner/localization/my_localizations.dart';
 import 'package:flutter/cupertino.dart';
 
 class DataConverter {
+
+  static BookingPeriod fromStringToBookingPeriod(String str){
+    if(str == BookingPeriod.evening.name)return BookingPeriod.evening;
+    return BookingPeriod.morning;
+  }
 
 static String key2NameService(BuildContext context,String key){
   final locale = MyLocalizations.translate(context);

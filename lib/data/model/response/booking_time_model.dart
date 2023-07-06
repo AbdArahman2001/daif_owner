@@ -2,29 +2,31 @@ import 'package:daif_owner/helper/date_converter.dart';
 
 import '../../../utill/app_constants.dart';
 
-class BookingTimeModel {
+enum BookingPeriod{
+  evening,morning
+}
+
+class BookingDateModel {
   final String year; //"day-month-year-period" period: a:AM, p: PM
   final String month;
   final String day;
-  final String period;
 
-  BookingTimeModel(
+  BookingDateModel(
       {required this.year,
       required this.month,
-      required this.day,
-      required this.period});
+      required this.day,});
 
-  factory BookingTimeModel.fromStringInfo(String strInfo) {
+  factory BookingDateModel.fromStringInfo(String strInfo) {
     final infoList = strInfo.split("-");
-    return BookingTimeModel(
+    return BookingDateModel(
         year: infoList[2],
         month: infoList[1],
         day: infoList[0],
-        period: infoList[3]);
+        );
   }
 
   String toStringInfo() {
-    return [day, month, year, period].join("-");
+    return [year, month, day].join("-");
   }
 
   String toFormattedTime() {

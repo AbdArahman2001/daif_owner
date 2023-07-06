@@ -4,15 +4,14 @@ class AppConstants {
   static const  appName = 'Daif - Owner';
   static const  appVersion = '1.0.0';
   // API end points
-  static const  baseUrl = "http://46.101.71.155/api/owner";
-  static const  loginUrl = '/auth/login';
-  static const  registerUrl = '/auth/register';
-  static const  createChalet = '/chalet/create';
-  static const  getChalet = '/chalet';
-  static const  getAllChalets = '/chalet';
-  static const  getChaletAttachments = '/chalet/create';
-  static const  sendOtp = '/auth/send_verify_code';
-  static const  verifyOtp = '/auth/check_verify_code';
+  static const  baseUrl = "http://46.101.71.155/api";
+  static const  loginUrl = '/owner/auth/login';
+  static const  registerUrl = '/owner/auth/register';
+  static const  createChalet = '/owner/chalet/create';
+  static const  getAllChalets = '/owner/chalet';
+  static const  sendOtp = '/owner/auth/send_verify_code';
+  static const  verifyOtp = '/owner/auth/check_verify_code';
+  static const  services = '/services';
 
   // app constants
   static const token = "token";

@@ -12,7 +12,7 @@ class UserModel {
   final String email;
   final String? password;
   final dynamic image; // XFile or String
-  final int governorateId;
+  final String governorateId;
   final String? accessToken;
   final bool? verify;
 
@@ -74,9 +74,10 @@ class UserModel {
     };
   }
 
-  Map<String, dynamic> getRequestHeaders() {
-    return {
-      "Authorization": "Bearer ${accessToken?.split("_").last}",
-    };
-  }
+  // Map<String, dynamic> getRequestHeaders() {
+  //   log("getting query headers: ${accessToken?.split("_").last}");
+  //   return {
+  //
+  //   };
+  // }
 }

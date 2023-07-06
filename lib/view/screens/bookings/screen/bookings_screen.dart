@@ -22,34 +22,29 @@ class BookingsScreen extends StatelessWidget {
           onPressed: () {},
         ),
       ),
-      body: GetBuilder<BookingsController>(
-          init: BookingsController(),
-          builder: (controller) {
-            return Container(
-              padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 16.w),
-              child: Column(
-                children: [
-                  BookingsStatusTabBarWidget(
-                    controller: controller,
-                  ),
-                  SizedBox(
-                    height: 12.h,
-                  ),
-                  Expanded(
-                      child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        PendingBookingShortInfoWidget(),
-                        PendingBookingShortInfoWidget(),
-                        PendingBookingShortInfoWidget(),
-                        PendingBookingShortInfoWidget(),
-                      ],
-                    ),
-                  ))
-                ],
+      body: GetBuilder<BookingsController>(builder: (controller) {
+        return Container(
+          padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 16.w),
+          child: Column(
+            children: [
+              BookingsStatusTabBarWidget(
+                controller: controller,
               ),
-            );
-          }),
+              SizedBox(
+                height: 12.h,
+              ),
+              Expanded(
+                  child: SingleChildScrollView(
+                child: Column(
+                    children: controller.allBookings
+                        .map((booking) => PendingBookingShortInfoWidget(
+                            bookingModel: booking))
+                        .toList()),
+              ))
+            ],
+          ),
+        );
+      }),
     );
   }
 }

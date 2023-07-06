@@ -1,5 +1,11 @@
+import 'package:daif_owner/data/model/response/address_model.dart';
 import 'package:daif_owner/data/model/response/attachment_model.dart';
+import 'package:daif_owner/data/model/response/booking_model.dart';
+import 'package:daif_owner/data/model/response/booking_time_model.dart';
+import 'package:daif_owner/data/model/response/price_model.dart';
+import 'package:daif_owner/data/model/response/service_model.dart';
 import 'package:daif_owner/helper/helper.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import '../data/model/response/base/api_response.dart';
@@ -10,70 +16,126 @@ import '../utill/assets_manager.dart';
 
 class MyPlacesController extends GetxController {
   final MyPlacesRepo myPlacesRepo = MyPlacesRepo.instance;
-  @override
-  onInit()async{
-    super.onInit();
-    await getAllChalets();
-  }
-  MyPlacesController() {
-    services = Map<String, bool>.fromIterables(
-        placeServices, List.generate(placeServices.length, (index) => false));
-  }
+  final TextEditingController placeNameController = TextEditingController();
+  final TextEditingController addressController = TextEditingController();
+  final TextEditingController eveningPriceController = TextEditingController();
+  final TextEditingController morningPriceController = TextEditingController();
+  final TextEditingController descriptionController = TextEditingController();
+  final TextEditingController pollLengthController = TextEditingController();
+  final TextEditingController pollWidthController = TextEditingController();
+  final TextEditingController pollMinHeightController = TextEditingController();
+  final TextEditingController pollMinWidthController = TextEditingController();
+  final TextEditingController videoLinkController = TextEditingController();
 
   List<XFile> pickedImages = [];
   Governorate _selectedGovernorate = Governorate.gaza;
   XFile? licenceImage;
-
   Governorate get selectedGovernorate => _selectedGovernorate;
-  Map<String, bool> services = {};
   List<ChaletShortInfo>? myChalets;
   ChaletModel? currentChalet;
   List<AttachmentModel>? currentChaletAttachments;
   bool isLoading = false;
+  List<int> selectedServicesIds = [];
+  List<ServiceModel> allAvailableServices = [];
 
-  Future<void> getChaletAttachments(String chaletId) async {
+
+
+  getAllAvailableServices()async{
+    allAvailableServices = [];
+    isLoading = true;
+    update();
+    ApiResponse apiResponse = await myPlacesRepo.getAllAvailableServices();
+    if (apiResponse.response != null &&
+        apiResponse.response!.statusCode == 200 &&
+        apiResponse.response!.data["error"] == false) {
+      allAvailableServices = (apiResponse.response!.data["data"]["services"] as List)
+          .map((service) => ServiceModel.fromMap(service))
+          .toList();
+    } else {
+      ApiChecker.checkApi(apiResponse);
+    }
+    isLoading = false;
+    update();
+  }
+
+  Future<void> _getChaletAttachments(int chaletId) async {
     currentChaletAttachments = null;
-    ApiResponse apiResponse = await myPlacesRepo.getChalet(chaletId);
+    ApiResponse apiResponse = await myPlacesRepo.getChaletAttachments(chaletId);
     if (apiResponse.response != null &&
         apiResponse.response!.statusCode == 200 &&
         apiResponse.response!.data["error"] == false) {
       currentChaletAttachments = (apiResponse.response!.data["data"] as List)
           .map((attachment) => AttachmentModel.fromMap(attachment))
           .toList();
-      isLoading = false;
     } else {
-      isLoading = false;
-      update();
       ApiChecker.checkApi(apiResponse);
     }
   }
 
-  Future<void> getChalet(String chaletId) async {
+  getChaletInfoAndAttachments(int chaletId) async {
+    if (currentChalet != null && currentChalet!.id == chaletId) return;
+    isLoading = true;
+    await _getChalet(chaletId);
+    await _getChaletAttachments(chaletId);
+    isLoading = false;
+    update();
+  }
+
+  Future<void> _getChalet(int chaletId) async {
     currentChalet = null;
     ApiResponse apiResponse = await myPlacesRepo.getChalet(chaletId);
     if (apiResponse.response != null &&
         apiResponse.response!.statusCode == 200 &&
         apiResponse.response!.data["error"] == false) {
       currentChalet = ChaletModel.fromMap(apiResponse.response!.data["data"]);
-      isLoading = false;
     } else {
-      isLoading = false;
-      update();
+      ApiChecker.checkApi(apiResponse);
+    }
+  }
+  createChaletWithAttachments()async{
+    final result = await _createChalet();
+    if(result){
+      _addChaletAttachment();
+      Get.back();
+      getAllChalets();
+    }
+  }
+
+  Future<void> _addChaletAttachment() async {
+    ApiResponse apiResponse = await myPlacesRepo.addChaletAttachment(pickedImages,currentChalet!.id);
+    if (apiResponse.response != null &&
+        apiResponse.response!.statusCode == 200 &&
+        apiResponse.response!.data["error"] == false) {
+    } else {
       ApiChecker.checkApi(apiResponse);
     }
   }
 
-  Future<void> createChalet(ChaletModel chaletModel) async {
-    ApiResponse apiResponse = await myPlacesRepo.createChalet(chaletModel);
+  Future<bool> _createChalet() async {
+    final ChaletModel chalet = ChaletModel(
+      id: 0,
+      videoLink: videoLinkController.text,
+      name: placeNameController.text,
+      address:
+          AddressModel(lat: "12.2", long: "32.3", name: addressController.text),
+      price: PriceModel(
+          morning: morningPriceController.text,
+          evening: eveningPriceController.text),
+      description: descriptionController.text,
+      status: "null",
+      governorateId: (selectedGovernorate.index + 1),
+      services: selectedServicesIds
+          .map((id) => ServiceModel(id: id, name: "", icon: ""))
+          .toList(),
+    );
+    ApiResponse apiResponse = await myPlacesRepo.createChalet(chalet);
     if (apiResponse.response != null &&
         apiResponse.response!.statusCode == 200 &&
         apiResponse.response!.data["error"] == false) {
-      isLoading = false;
-      // Navigate to another screen
+      return true;
     } else {
-      isLoading = false;
-      update();
       ApiChecker.checkApi(apiResponse);
+      return false;
     }
   }
 
@@ -91,15 +153,20 @@ class MyPlacesController extends GetxController {
           .map((chaletInfo) => ChaletShortInfo.fromMap(chaletInfo))
           .toList();
       isLoading = false;
+      update();
     } else {
       isLoading = false;
       update();
       ApiChecker.checkApi(apiResponse);
     }
   }
-
-  void changeServiceValue(String key, bool? value) {
-    services[key] = value ?? false;
+  // select/unselect
+  changeServiceStatus(int serviceId){
+    if(selectedServicesIds.contains(serviceId)){
+      selectedServicesIds.remove(serviceId);
+    }else {
+      selectedServicesIds.add(serviceId);
+    }
     update();
   }
 
@@ -145,19 +212,7 @@ class MyPlacesController extends GetxController {
     update();
   }
 
-  final List<String> placeServices = [
-    "restaurant",
-    "free_wifi",
-    "swimming_bool",
-    "parking",
-    "restaurant"
-  ];
-  final String dummyDetails =
-      "Lorem Ipsum is simply dummy text of the printing and typesetting industry Lorem Ipsum is simplydummy text of the printing.";
-  final List<String> placeImages = [
-    "https://img.freepik.com/free-vector/gradient-football-field-background_23-2149013355.jpg?w=996&t=st=1675283497~exp=1675284097~hmac=c32ccdd7f14980294b12546347203f9b4b504917eebad05c49c1d6393d31e736",
-    "https://img.freepik.com/premium-photo/soccer-field-spotlight-background-stadium_46250-1363.jpg?w=1060"
-  ];
+
   final List<String> myPlacesCategoriesImages = [
     // ImageAssets.apartmentsCategory,
     //ImageAssets.hotelsCategory,

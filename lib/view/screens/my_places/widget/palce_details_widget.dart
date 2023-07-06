@@ -9,11 +9,9 @@ import '../../bookings/widget/custom_divider_widget.dart';
 
 class PlaceDetailsWidget extends StatelessWidget {
   const PlaceDetailsWidget(
-      {Key? key, required this.place, required this.dummyDetails, required this.services})
+      {Key? key, required this.chalet})
       : super(key: key);
-  final ChaletModel place;
-  final String dummyDetails;
-final List<String> services;
+  final ChaletModel chalet;
   @override
   Widget build(BuildContext context) {
     final locale = MyLocalizations.translate(context);
@@ -27,7 +25,7 @@ final List<String> services;
               height: 20.h,
             ),
             Text(
-              dummyDetails,
+             chalet.description ,
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             SizedBox(
@@ -58,7 +56,7 @@ final List<String> services;
         SizedBox(
           height: 20.h,
         ),
-        ServicesWidget(services: services),
+        ServicesWidget(services: chalet.services),
         SizedBox(
           height: 100.h,
         ),

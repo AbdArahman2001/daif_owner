@@ -9,6 +9,7 @@ abstract class Routes {
   static const dashboard = "/dashboard";
   static const onBoarding = "/onBoarding";
   static const otp = "/otp";
+  static const addNewChalet = "/addNewChalet";
 
 }
 

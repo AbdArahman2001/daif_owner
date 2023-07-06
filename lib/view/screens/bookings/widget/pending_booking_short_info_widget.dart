@@ -1,3 +1,4 @@
+import 'package:daif_owner/data/model/response/booking_model.dart';
 import 'package:daif_owner/localization/my_localizations.dart';
 import 'package:daif_owner/utill/color_manager.dart';
 import 'package:daif_owner/utill/styles_manager.dart';
@@ -12,13 +13,18 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 class PendingBookingShortInfoWidget extends StatelessWidget {
-  const PendingBookingShortInfoWidget({Key? key}) : super(key: key);
+  const PendingBookingShortInfoWidget({Key? key, required this.bookingModel})
+      : super(key: key);
+  final BookingModel bookingModel;
 
   @override
   Widget build(BuildContext context) {
     final locale = MyLocalizations.translate(context);
     return InkWell(
-      onTap: ()=>Get.to(BookingDetailsScreen()),
+      onTap: () {
+        Get.to(() => const BookingDetailsScreen());
+        // TODO get the booking details by booking id
+      },
       child: Container(
         decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(16.r),
@@ -28,22 +34,24 @@ class PendingBookingShortInfoWidget extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            BookingIDWidget(id: "488443"),
+            BookingIDWidget(id: bookingModel.id),
             SizedBox(
               height: 2.h,
             ),
             Text(
-              "Ezz Aldeen | Gaza",
+              bookingModel.chaletName,
               style: style_500_12(ColorManager.unSelectedTextColor),
             ),
             SizedBox(
               height: 8.h,
             ),
-            Divider(),
+            const Divider(),
             SizedBox(
               height: 8.h,
             ),
-            const PlaceImgAndNameWidget(),
+            PlaceImgAndNameWidget(
+                placeName: bookingModel.customerName,
+                bookingPrice: bookingModel.bookingPrice),
             SizedBox(
               height: 8.h,
             ),
@@ -53,14 +61,20 @@ class PendingBookingShortInfoWidget extends StatelessWidget {
             ),
             Row(
               children: [
-                Icon(Icons.calendar_month),
+                const Icon(Icons.calendar_month),
                 SizedBox(
                   width: 12.w,
                 ),
-                BookingTimeAndDateWidget(),
-                Expanded(child: SizedBox()),
-                Text(locale.total + " :  ",style: style_500_14(ColorManager.blackTextColor),),
-                Text("85.34\$",style: style_600_14(ColorManager.complementaryColor),)
+                BookingTimeAndDateWidget(bookingDate: bookingModel.bookingDate.toStringInfo(),),
+                const Expanded(child: SizedBox()),
+                Text(
+                  "${locale.total} :  ",
+                  style: style_500_14(ColorManager.blackTextColor),
+                ),
+                Text(
+                  "${bookingModel.bookingPrice}\$",
+                  style: style_600_14(ColorManager.complementaryColor),
+                )
               ],
             )
           ],

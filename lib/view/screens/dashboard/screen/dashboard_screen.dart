@@ -1,4 +1,6 @@
+import 'dart:developer';
 
+import 'package:daif_owner/controller/bookings_controller.dart';
 import 'package:daif_owner/view/screens/bookings/screen/bookings_screen.dart';
 import 'package:daif_owner/view/screens/calendar/screen/calendar_screen.dart';
 import 'package:daif_owner/view/screens/my_places/screen/chalets_screens.dart';
@@ -33,7 +35,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
   void initState() {
     super.initState();
     Get.put<MyPlacesController>(MyPlacesController());
-    _screens = [BookingsScreen(), CalendarScreen(),ChaletsScreen(), Scaffold()];
+    Get.put<BookingsController>(BookingsController());
+    _screens = [
+      const BookingsScreen(),
+      CalendarScreen(),
+      ChaletsScreen(),
+      Scaffold()
+    ];
     _tabBarIcons = [
       Icons.format_list_bulleted,
       Icons.calendar_month,
@@ -63,7 +71,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
       child: Scaffold(
         key: _scaffoldKey,
         bottomNavigationBar: ClipRRect(
-          borderRadius: BorderRadius.only(topLeft: Radius.circular(32.r),topRight: Radius.circular(32.r)),
+          borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(32.r), topRight: Radius.circular(32.r)),
           child: BottomNavigationBar(
             currentIndex: _pageIndex,
             type: BottomNavigationBarType.fixed,
@@ -90,8 +99,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   void _setPage(int pageIndex) {
+    log(pageIndex.toString());
     setState(() {
       _pageController.jumpToPage(pageIndex);
+      if (pageIndex == 0) {
+        final controller = Get.find<BookingsController>();
+        controller.getAllBookings(1);
+      } else if (pageIndex == 2) {
+        final controller = Get.find<MyPlacesController>();
+        controller.getAllChalets();
+      }
       _pageIndex = pageIndex;
     });
   }
