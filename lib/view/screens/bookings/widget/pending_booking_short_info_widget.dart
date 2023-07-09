@@ -12,18 +12,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
+import '../../../../controller/bookings_controller.dart';
+
 class PendingBookingShortInfoWidget extends StatelessWidget {
-  const PendingBookingShortInfoWidget({Key? key, required this.bookingModel})
+   PendingBookingShortInfoWidget({Key? key, required this.bookingModel})
       : super(key: key);
   final BookingModel bookingModel;
-
+  final controller = Get.find<BookingsController>();
   @override
   Widget build(BuildContext context) {
     final locale = MyLocalizations.translate(context);
     return InkWell(
       onTap: () {
-        Get.to(() => const BookingDetailsScreen());
-        // TODO get the booking details by booking id
+        controller.getBookingAttachments( bookingModel.id);
+        Get.to(() =>  BookingDetailsScreen(bookingModel: bookingModel,));
+
       },
       child: Container(
         decoration: BoxDecoration(

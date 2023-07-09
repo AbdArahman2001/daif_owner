@@ -1,5 +1,8 @@
+import 'package:daif_owner/data/local/my_shared_pref.dart';
+import 'package:daif_owner/routes/app_pages.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../data/model/response/base/api_response.dart';
 import '../view/basewidget/custom_snackbar.dart';
@@ -12,9 +15,6 @@ class ApiChecker {
     try {
       if (apiResponse.error != null && apiResponse.error is String) {
         errorMessage = apiResponse.error.toString();
-        // } else if (apiResponse.response != null) {
-        //   errorMessage = (apiResponse.response as Map<String, dynamic>)["error"]
-        //       ["data"]["message"];
       } else {
         if (apiResponse.error is Exception) {
           if (apiResponse.error is DioError) {
@@ -34,6 +34,11 @@ class ApiChecker {
                 break;
               case DioErrorType.response:
                 switch (apiResponse.error.response!.statusCode) {
+                  case 401:
+                    errorMessage = "Unauthenticated";
+                    MySharedPref.instance.clearUserInfo();
+                    Get.offNamed(Routes.login);
+                    break;
                   case 404:
                   case 500:
                   case 503:

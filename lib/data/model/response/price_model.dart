@@ -1,6 +1,6 @@
 class PriceModel {
-  String morning;
-  String evening;
+  double morning;
+  double evening;
 
   PriceModel({
     required this.morning,
@@ -16,8 +16,8 @@ class PriceModel {
 
   factory PriceModel.fromMap(Map<String, dynamic> map) {
     return PriceModel(
-      morning: map['morning'] as String,
-      evening: map['evening'] as String,
+      morning: map['morning'] ,
+      evening: map['evening'] ,
     );
   }
 }

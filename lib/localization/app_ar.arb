@@ -1,4 +1,10 @@
 {
+  "choose_the_period": "اختر الفترة",
+  "booking_date": "تاريخ الحجز",
+  "change_date": "تغيير التاريخ",
+  "choose_the_chalet": "اختر الشاليه",
+  "identity_number": "رقم الهوية",
+  "customer_name": "اسم الزبون",
   "email": "البريد الإلكتروني",
   "from_gallery": "من الاستوديو",
   "open_camera": "افتح الكاميرا",

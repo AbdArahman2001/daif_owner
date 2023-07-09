@@ -1,16 +1,19 @@
 class AttachmentModel {
-  int id;
-  String path;
+ final int id;
+ final  String path;
+ final  String tag;
+
 
   AttachmentModel({
     required this.id,
     required this.path,
+    required this.tag,
   });
 
   Map<String, dynamic> toMap() {
     return {
-      'id': id,
       'path': path,
+      'tag': tag,
     };
   }
 
@@ -18,6 +21,7 @@ class AttachmentModel {
     return AttachmentModel(
       id: map['id']??0 ,
       path: map['path']??"",
+      tag: map['tag']??"",
     );
   }
 }

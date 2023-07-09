@@ -10,9 +10,9 @@ class BookingModel {
   final double bookingPrice;
   final BookingDateModel bookingDate;
   final BookingPeriod bookingPeriod;
-  final int numberOfPersons;
+  final int? numberOfPersons;
   final String chaletName;
-  final String status;
+  final String status; // 0: await, 1: done, 2: canceled
 
   BookingModel({
     required this.id,
@@ -54,8 +54,6 @@ class BookingModel {
       'booking_date': bookingDate.toStringInfo(),
       'booking_period': bookingPeriod.name,
       'number_of_persons': numberOfPersons,
-      'chalet_name': chaletName,
-      'status': status,
     };
   }
 }

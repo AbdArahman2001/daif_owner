@@ -10,6 +10,7 @@ abstract class Routes {
   static const onBoarding = "/onBoarding";
   static const otp = "/otp";
   static const addNewChalet = "/addNewChalet";
+  static const addNewBooking = "/addNewBooking";
 
 }
 

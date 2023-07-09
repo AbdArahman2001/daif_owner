@@ -1,9 +1,22 @@
 import 'package:daif_owner/helper/date_converter.dart';
+import 'package:daif_owner/localization/my_localizations.dart';
+import 'package:flutter/cupertino.dart';
 
 import '../../../utill/app_constants.dart';
 
 enum BookingPeriod{
   evening,morning
+}
+extension BookingPeriodInfo on BookingPeriod{
+  String translate(BuildContext context){
+    final locale = MyLocalizations.translate(context);
+    switch (this){
+      case BookingPeriod.evening:
+        return locale.evening;
+      case BookingPeriod.morning:
+        return locale.morning;
+    }
+  }
 }
 
 class BookingDateModel {
@@ -23,6 +36,10 @@ class BookingDateModel {
         month: infoList[1],
         day: infoList[0],
         );
+  }
+
+  factory BookingDateModel.fromDateTime(DateTime bookingDate){
+    return BookingDateModel(year: bookingDate.year.toString(), month: bookingDate.month.toString(), day: bookingDate.day.toString());
   }
 
   String toStringInfo() {

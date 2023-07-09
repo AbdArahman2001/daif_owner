@@ -7,57 +7,71 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+
+import '../../../../helper/helper.dart';
 
 class AddPlaceImagesWidget extends StatelessWidget {
-  const AddPlaceImagesWidget({Key? key}) : super(key: key);
+  const AddPlaceImagesWidget(
+      {Key? key,
+      required this.removeImg,
+      required this.maxImagesNumber,
+      required this.dimensions,
+      required this.pickMultiImage,
+      required this.pickedImages})
+      : super(key: key);
+  final List<XFile> pickedImages;
+  final void Function(int index) removeImg;
+  final int maxImagesNumber;
+  final double dimensions;
+  final Function(ImageSource source) pickMultiImage;
 
   @override
   Widget build(BuildContext context) {
     int index = -1;
-    return GetBuilder<MyPlacesController>(
-        builder: (controller) {
-          return SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Row(
-              children: [
-                ...controller.pickedImages.map((e) {
-                  index++;
-                  return _SinglePlaceImg(
-                    isFromNetwork: false,
-                    imageUrl: e.path,
-                    imageIndex: index,
-                    removeImg: controller.removeImage,
-                  );
-                }),
-                SizedBox(
-                  width: 3.w,
-                ),
-                Visibility(
-                  visible: controller.pickedImages.length < 6,
-                  child: SizedBox(
-                    width: 70.w,
-                    height: 70.w,
-                    child: DottedBorder(
-                      radius: Radius.circular(12.r),
-                      color: ColorManager.grey1,
-                      strokeWidth: 1,
-                      borderType: BorderType.RRect,
-                      dashPattern: <double>[5, 5],
-                      child: Center(
-                          child: IconButton(
-                        icon: const Icon(Icons.add),
-                        onPressed: controller.pickMultiImage,
-                      )),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  width: 100.w,
-                )
-              ],
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: [
+          ...pickedImages.map((e) {
+            index++;
+            return _SinglePlaceImg(
+              isFromNetwork: false,
+              imageUrl: e.path,
+              imageIndex: index,
+              removeImg: removeImg,
+              dimensions: dimensions,
+            );
+          }),
+          SizedBox(
+            width: 3.w,
+          ),
+          Visibility(
+            visible: pickedImages.length < maxImagesNumber,
+            child: SizedBox(
+              width: dimensions,
+              height: dimensions,
+              child: DottedBorder(
+                radius: Radius.circular(12.r),
+                color: ColorManager.grey1,
+                strokeWidth: 1,
+                borderType: BorderType.RRect,
+                dashPattern: const <double>[5, 5],
+                child: Center(
+                    child: IconButton(
+                  icon: const Icon(Icons.add),
+                  onPressed: () =>
+                      Helper.openImageSourceDialog(context,pickMultiImage),
+                )),
+              ),
             ),
-          );
-        });
+          ),
+          SizedBox(
+            width: 100.w,
+          )
+        ],
+      ),
+    );
   }
 }
 
@@ -66,11 +80,13 @@ class _SinglePlaceImg extends StatelessWidget {
       {Key? key,
       required this.isFromNetwork,
       required this.imageUrl,
-      required this.removeImg, required this.imageIndex})
+      required this.removeImg,
+      required this.imageIndex, required this.dimensions})
       : super(key: key);
   final bool isFromNetwork;
   final String imageUrl;
   final int imageIndex;
+  final double dimensions;
   final void Function(int index) removeImg;
 
   @override
@@ -79,8 +95,8 @@ class _SinglePlaceImg extends StatelessWidget {
       alignment: Alignment.topRight,
       children: [
         Container(
-          width: 70.w,
-          height: 70.w,
+          width: dimensions,
+          height: dimensions,
           margin: EdgeInsets.symmetric(horizontal: 3.w),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(12.r),
@@ -99,7 +115,7 @@ class _SinglePlaceImg extends StatelessWidget {
           ),
         ),
         IconButton(
-          onPressed: ()=>removeImg(imageIndex),
+          onPressed: () => removeImg(imageIndex),
           icon: Icon(
             Icons.cancel,
             color: ColorManager.errorColor.withOpacity(0.5),

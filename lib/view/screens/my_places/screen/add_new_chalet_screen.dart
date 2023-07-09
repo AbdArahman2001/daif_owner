@@ -26,7 +26,7 @@ class AddNewChaletScreen extends StatelessWidget {
     return Scaffold(
       appBar: CustomAppBar(
         title: locale.new_chalet,
-        actions: SizedBox.shrink(),
+        actions: const SizedBox.shrink(),
         leading: IconButton(
           onPressed: () => Get.back(),
           icon: const Icon(Icons.arrow_back_ios),
@@ -49,7 +49,12 @@ class AddNewChaletScreen extends StatelessWidget {
                 SizedBox(
                   height: 10.h,
                 ),
-                AddPlaceImagesWidget(),
+                AddPlaceImagesWidget(
+                    removeImg: controller.removeImage,
+                    maxImagesNumber: 6,
+                    dimensions: 70.w,
+                    pickMultiImage: controller.pickMultiImage,
+                    pickedImages: controller.pickedImages),
                 SizedBox(
                   height: 16.h,
                 ),
@@ -102,7 +107,6 @@ class AddNewChaletScreen extends StatelessWidget {
                 ),
                 TextFormField(
                   controller: controller.addressController,
-
                   decoration: InputDecoration(hintText: locale.address),
                 ),
                 SizedBox(
@@ -124,7 +128,6 @@ class AddNewChaletScreen extends StatelessWidget {
                           ),
                           TextFormField(
                             controller: controller.eveningPriceController,
-
                             decoration: const InputDecoration(hintText: "500"),
                           ),
                         ],
@@ -161,8 +164,10 @@ class AddNewChaletScreen extends StatelessWidget {
                   style: style_400_16(ColorManager.blackTextColor),
                 ),
                 ChooseServicesWidget(
-                    allServices: controller.allAvailableServices,
-                    changeServiceStatus: controller.changeServiceStatus, selectedServices: controller.selectedServicesIds,),
+                  allServices: controller.allAvailableServices,
+                  changeServiceStatus: controller.changeServiceStatus,
+                  selectedServices: controller.selectedServicesIds,
+                ),
                 SizedBox(
                   height: 6.h,
                 ),
@@ -203,7 +208,6 @@ class AddNewChaletScreen extends StatelessWidget {
                     Expanded(
                       child: TextFormField(
                         controller: controller.pollWidthController,
-
                         decoration: InputDecoration(hintText: locale.width),
                       ),
                     ),
@@ -217,7 +221,6 @@ class AddNewChaletScreen extends StatelessWidget {
                     Expanded(
                       child: TextFormField(
                         controller: controller.pollMinHeightController,
-
                         decoration:
                             InputDecoration(hintText: locale.min_height),
                       ),
@@ -228,7 +231,6 @@ class AddNewChaletScreen extends StatelessWidget {
                     Expanded(
                       child: TextFormField(
                         controller: controller.pollMinWidthController,
-
                         decoration:
                             InputDecoration(hintText: locale.max_height),
                       ),
@@ -247,7 +249,6 @@ class AddNewChaletScreen extends StatelessWidget {
                 ),
                 TextFormField(
                   controller: controller.videoLinkController,
-
                   decoration: const InputDecoration(
                       hintText: "https://www.youtube.com"),
                 ),
@@ -286,7 +287,7 @@ class AddNewChaletScreen extends StatelessWidget {
                                 )
                               : const SizedBox(),
                           IconButton(
-                            icon: Icon(
+                            icon: const Icon(
                               Icons.add,
                             ),
                             onPressed: () => Helper.openImageSourceDialog(
@@ -301,7 +302,8 @@ class AddNewChaletScreen extends StatelessWidget {
                   height: 40.h,
                 ),
                 CustomElevatedButton(
-                    onPressed: controller.createChaletWithAttachments, child: Text(locale.save)),
+                    onPressed: controller.createChaletWithAttachments,
+                    child: Text(locale.save)),
                 SizedBox(
                   height: 30.h,
                 ),
@@ -312,5 +314,4 @@ class AddNewChaletScreen extends StatelessWidget {
       }),
     );
   }
-
 }

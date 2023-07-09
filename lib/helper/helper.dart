@@ -8,7 +8,9 @@ class Helper{
   static getDayNameFromIndex(int index,String startDayAtMonth,int monthIndex){
     return "Saturday";
   }
-
+static navigateToCallingBoard(){
+    // TODO Implement it
+}
  static openImageSourceDialog(BuildContext context, Function pickImg) async {
     final locale = MyLocalizations.translate(context);
     final AlertDialog dialog = AlertDialog(

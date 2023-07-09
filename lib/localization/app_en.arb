@@ -1,4 +1,10 @@
 {
+  "choose_the_period": "Choose The Period",
+  "booking_date": "Booking Date",
+  "change_date": "Change Date",
+  "choose_the_chalet": "Choose the chalet",
+  "identity_number": "Identity Number",
+  "customer_name": "Customer Name",
   "email": "Email",
   "from_gallery": "From Gallery",
   "open_camera": "Open Camera",

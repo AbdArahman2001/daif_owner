@@ -104,7 +104,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
       _pageController.jumpToPage(pageIndex);
       if (pageIndex == 0) {
         final controller = Get.find<BookingsController>();
-        controller.getAllBookings(1);
+        controller.getAllBookings(0);
       } else if (pageIndex == 2) {
         final controller = Get.find<MyPlacesController>();
         controller.getAllChalets();

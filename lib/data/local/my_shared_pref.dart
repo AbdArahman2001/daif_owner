@@ -66,6 +66,7 @@ class MySharedPref {
     if(tokenType == TokenType.login.name) return TokenType.login;
     return TokenType.register;
   }
+  Future<void> clearUserInfo() async => await _sharedPreferences.remove(AppConstants.userInfo);
 
   /// clear all data from shared pref
   Future<void> clear() async => await _sharedPreferences.clear();

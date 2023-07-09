@@ -30,6 +30,7 @@ class MyPlacesController extends GetxController {
   List<XFile> pickedImages = [];
   Governorate _selectedGovernorate = Governorate.gaza;
   XFile? licenceImage;
+
   Governorate get selectedGovernorate => _selectedGovernorate;
   List<ChaletShortInfo>? myChalets;
   ChaletModel? currentChalet;
@@ -38,9 +39,7 @@ class MyPlacesController extends GetxController {
   List<int> selectedServicesIds = [];
   List<ServiceModel> allAvailableServices = [];
 
-
-
-  getAllAvailableServices()async{
+  getAllAvailableServices() async {
     allAvailableServices = [];
     isLoading = true;
     update();
@@ -48,9 +47,10 @@ class MyPlacesController extends GetxController {
     if (apiResponse.response != null &&
         apiResponse.response!.statusCode == 200 &&
         apiResponse.response!.data["error"] == false) {
-      allAvailableServices = (apiResponse.response!.data["data"]["services"] as List)
-          .map((service) => ServiceModel.fromMap(service))
-          .toList();
+      allAvailableServices =
+          (apiResponse.response!.data["data"]["services"] as List)
+              .map((service) => ServiceModel.fromMap(service))
+              .toList();
     } else {
       ApiChecker.checkApi(apiResponse);
     }
@@ -92,9 +92,10 @@ class MyPlacesController extends GetxController {
       ApiChecker.checkApi(apiResponse);
     }
   }
-  createChaletWithAttachments()async{
+
+  createChaletWithAttachments() async {
     final result = await _createChalet();
-    if(result){
+    if (result) {
       _addChaletAttachment();
       Get.back();
       getAllChalets();
@@ -102,7 +103,8 @@ class MyPlacesController extends GetxController {
   }
 
   Future<void> _addChaletAttachment() async {
-    ApiResponse apiResponse = await myPlacesRepo.addChaletAttachment(pickedImages,currentChalet!.id);
+    ApiResponse apiResponse =
+        await myPlacesRepo.addChaletAttachment(pickedImages, currentChalet!.id);
     if (apiResponse.response != null &&
         apiResponse.response!.statusCode == 200 &&
         apiResponse.response!.data["error"] == false) {
@@ -119,8 +121,8 @@ class MyPlacesController extends GetxController {
       address:
           AddressModel(lat: "12.2", long: "32.3", name: addressController.text),
       price: PriceModel(
-          morning: morningPriceController.text,
-          evening: eveningPriceController.text),
+          morning: double.parse(morningPriceController.text),
+          evening: double.parse(eveningPriceController.text)),
       description: descriptionController.text,
       status: "null",
       governorateId: (selectedGovernorate.index + 1),
@@ -139,8 +141,7 @@ class MyPlacesController extends GetxController {
     }
   }
 
-  Future<void> getAllChalets() async {
-    print("----------------- getting all chalets");
+  Future<List<ChaletShortInfo>?> getAllChalets() async {
     myChalets = null;
     isLoading = true;
     update();
@@ -148,23 +149,25 @@ class MyPlacesController extends GetxController {
     if (apiResponse.response != null &&
         apiResponse.response!.statusCode == 200 &&
         apiResponse.response!.data["error"] == false) {
-      print(apiResponse.response!.data);
       myChalets = (apiResponse.response!.data["data"] as List)
           .map((chaletInfo) => ChaletShortInfo.fromMap(chaletInfo))
           .toList();
       isLoading = false;
       update();
+      return myChalets;
     } else {
       isLoading = false;
       update();
       ApiChecker.checkApi(apiResponse);
+      return null;
     }
   }
+
   // select/unselect
-  changeServiceStatus(int serviceId){
-    if(selectedServicesIds.contains(serviceId)){
+  changeServiceStatus(int serviceId) {
+    if (selectedServicesIds.contains(serviceId)) {
       selectedServicesIds.remove(serviceId);
-    }else {
+    } else {
       selectedServicesIds.add(serviceId);
     }
     update();
@@ -191,16 +194,23 @@ class MyPlacesController extends GetxController {
     }
   }
 
-  void pickMultiImage() async {
+  void pickMultiImage(ImageSource? source) async {
     final ImagePicker imagePicker = ImagePicker();
-    List<XFile> images = await imagePicker.pickMultiImage();
-    if (images.isNotEmpty) {
-      pickedImages.insertAll(0, images);
-      if (pickedImages.length > 6) {
-        pickedImages = pickedImages.sublist(0, 6);
+    if (source != null && source == ImageSource.gallery) {
+      List<XFile> images = await imagePicker.pickMultiImage();
+      if (images.isNotEmpty) {
+        pickedImages.insertAll(0, images);
+        if (pickedImages.length > 6) {
+          pickedImages = pickedImages.sublist(0, 6);
+        }
       }
-      update();
+    } else {
+      final image = await imagePicker.pickImage(source: ImageSource.camera);
+      if (image != null && pickedImages.length < 6) {
+        pickedImages.insert(0, image);
+      }
     }
+    update();
   }
 
   int _selectedDetailsTabIndex = 0;
@@ -211,7 +221,6 @@ class MyPlacesController extends GetxController {
     _selectedDetailsTabIndex = index;
     update();
   }
-
 
   final List<String> myPlacesCategoriesImages = [
     // ImageAssets.apartmentsCategory,
