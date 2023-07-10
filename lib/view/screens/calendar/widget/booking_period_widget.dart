@@ -1,4 +1,5 @@
 
+import 'package:daif_owner/data/model/response/booking_time_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -13,8 +14,8 @@ class BookingPeriodWidget extends StatelessWidget {
       required this.selectedPeriod,
       required this.changeSelectedPeriod})
       : super(key: key);
-  final String selectedPeriod;
-  final void Function(String) changeSelectedPeriod;
+  final BookingPeriod selectedPeriod;
+  final void Function(BookingPeriod bookingPeriod) changeSelectedPeriod;
 
   @override
   Widget build(BuildContext context) {
@@ -23,15 +24,15 @@ class BookingPeriodWidget extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
         _SingleBookingPeriodWidget(
-            isSelected: selectedPeriod == "p",
+            isSelected: selectedPeriod == BookingPeriod.morning,
             title: locale.morning,
             image: IconAssets.sunIcon,
-            onTap: () => changeSelectedPeriod("p")),
+            onTap: () => changeSelectedPeriod(BookingPeriod.morning)),
         _SingleBookingPeriodWidget(
-            isSelected: selectedPeriod == "a",
+            isSelected: selectedPeriod == BookingPeriod.evening,
             title: locale.evening,
             image: IconAssets.moonIcon,
-            onTap: () => changeSelectedPeriod("a")),
+            onTap: () => changeSelectedPeriod(BookingPeriod.evening)),
       ],
     );
   }

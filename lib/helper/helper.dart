@@ -4,14 +4,34 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
-class Helper{
-  static getDayNameFromIndex(int index,String startDayAtMonth,int monthIndex){
-    return "Saturday";
+class Helper {
+  static getDayNameFromDate(DateTime firstDate, int dayIndex) {
+    final int day = ((firstDate.weekday + dayIndex - 1) % 7);
+    switch (day) {
+      case 1:
+        return "Monday";
+      case 2:
+        return "Tuesday";
+      case 3:
+        return "Wednesday";
+      case 4:
+        return "Thursday";
+      case 5:
+        return "Friday";
+      case 6:
+        return "Saturday";
+      case 0:
+        return "Sunday";
+      default:
+        return "UnKnown";
+    }
   }
-static navigateToCallingBoard(){
+
+  static navigateToCallingBoard() {
     // TODO Implement it
-}
- static openImageSourceDialog(BuildContext context, Function pickImg) async {
+  }
+
+  static openImageSourceDialog(BuildContext context, Function pickImg) async {
     final locale = MyLocalizations.translate(context);
     final AlertDialog dialog = AlertDialog(
       title: Text(locale.attack_image),
@@ -38,32 +58,20 @@ static navigateToCallingBoard(){
 
     showDialog(context: context, builder: (context) => dialog);
   }
-
-
 }
 
-enum WeekDays{
-  sat,sun,mon,tue,wed,thu,fri
-}
+enum WeekDays { sat, sun, mon, tue, wed, thu, fri }
 
-enum TokenType{
-  register,login
-}
+enum TokenType { register, login }
 
-enum Governorate {
-  north,
-  gaza,
-  middleGaza,
-  khanYounes,
-  rafah
-}
+enum Governorate { north, gaza, middleGaza, khanYounes, rafah }
 
-extension GovernorateExt on Governorate{
-  String getName(BuildContext context){
+extension GovernorateExt on Governorate {
+  String getName(BuildContext context) {
     final locale = MyLocalizations.translate(context);
-    switch(this){
+    switch (this) {
       case Governorate.north:
-      return locale.north_gaza;
+        return locale.north_gaza;
       case Governorate.gaza:
         return locale.gaza;
       case Governorate.middleGaza:

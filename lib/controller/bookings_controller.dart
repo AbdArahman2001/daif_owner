@@ -1,3 +1,4 @@
+import 'package:daif_owner/controller/calendar_controller.dart';
 import 'package:daif_owner/controller/my_places_controller.dart';
 import 'package:daif_owner/data/model/response/booking_time_model.dart';
 import 'package:daif_owner/data/model/response/chalet_model.dart';
@@ -22,6 +23,7 @@ class BookingsController extends GetxController {
     numberOfPersonsControllers = TextEditingController();
   }
 
+  final calendarController = Get.find<CalendarController>();
   final BookingRepo bookingsRepo = BookingRepo.instance;
 
   late final TextEditingController customerNameController;
@@ -43,14 +45,21 @@ class BookingsController extends GetxController {
 
   List<XFile> chosenBookingAttachments =
       []; // the images that user upload it when creating a new booking
+
+  @override
+  void onInit() {
+    super.onInit();
+    Future.delayed(const Duration(microseconds: 1))
+        .then((value) => getAllBookings(0));
+  }
+
   void changeSelectedChalet(int? chaletId) {
     selectedChaletId = chaletId ?? 1;
-    update();
   }
 
   void changeSelectedStatus(int index) {
     selectedTabIndex = index;
-    update();
+    getAllBookings(index);
   }
 
   Future<bool> getChaletIdWithName() async {
@@ -128,7 +137,6 @@ class BookingsController extends GetxController {
   getAllBookings(int status) async {
     allBookings = [];
     isLoading = true;
-    update();
     ApiResponse apiResponse = await bookingsRepo.getAllBookings(status);
     if (apiResponse.response != null &&
         apiResponse.response!.statusCode == 200 &&
@@ -171,24 +179,22 @@ class BookingsController extends GetxController {
     update();
   }
 
-  pickdate(BuildContext context)async {
+  pickdate(BuildContext context) async {
     final DateTime? result = await showDatePicker(
         context: context,
         initialDate: DateTime.now(),
         firstDate: DateTime((DateTime.now().year - 1)),
         lastDate: DateTime((DateTime.now().year + 1)));
-    if(result !=null){
+    if (result != null) {
       bookingDate = result;
       update();
     }
   }
 
-  changeSelectedPeriod(BookingPeriod? period){
-    if(period != null){
+  changeSelectedPeriod(BookingPeriod? period) {
+    if (period != null) {
       selectedBookingPeriod = period;
-      update();
+      calendarController.getCalendarBookings();
     }
   }
-
-
 }

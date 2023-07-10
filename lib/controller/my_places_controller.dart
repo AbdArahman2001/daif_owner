@@ -15,6 +15,9 @@ import '../helper/api_checker.dart';
 import '../utill/assets_manager.dart';
 
 class MyPlacesController extends GetxController {
+  MyPlacesController(){
+   // getAllChalets();
+  }
   final MyPlacesRepo myPlacesRepo = MyPlacesRepo.instance;
   final TextEditingController placeNameController = TextEditingController();
   final TextEditingController addressController = TextEditingController();

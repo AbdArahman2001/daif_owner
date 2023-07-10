@@ -19,7 +19,10 @@ class SingleDayWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap:()=> selectFunc(dayNumber.toString()),
+      onTap:()=> (){
+       final dialog = AlertDialog();
+        selectFunc(dayNumber.toString());
+      },
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 2.5.h, horizontal: 2.5.w),
         decoration: BoxDecoration(

@@ -1,84 +1,101 @@
 import 'dart:developer';
 
+import 'package:daif_owner/controller/my_places_controller.dart';
+import 'package:daif_owner/data/model/response/booking_time_model.dart';
+import 'package:daif_owner/data/model/response/calendar_booking_model.dart';
 import 'package:get/get.dart';
 
+import '../data/model/response/base/api_response.dart';
+import '../data/repository/booking_repo.dart';
+import '../helper/api_checker.dart';
 import '../helper/enum_data.dart';
+import 'bookings_controller.dart';
 
 class CalendarController extends GetxController {
-  CalendarController() {
-    _selectedMonth = Month.values[DateTime
-        .now()
-        .month - 1];
-    _selectedYear = DateTime
-        .now()
-        .year;
-    final year = DateTime.now().year;
-    _selectedPeriod = "a";
-    _availableYears = [year,year+1];
-    getBookedDaysAtMonth();
-  }
+  final BookingRepo bookingsRepo = BookingRepo.instance;
+  late Month selectedMonth;
+  late int selectedYear;
+  late BookingPeriod selectedPeriod;
+  late List<int> availableYears;
+  // List<String> bookedDaysAtMonth = [];
+  List<CalendarBookingModel> calendarBookings = [];
+  bool isLoading = false;
 
-  late Month _selectedMonth;
-
-  Month get selectedMonth => _selectedMonth;
-  late int _selectedYear;
-  late String _selectedPeriod;
-  String get selectedPeriod =>_selectedPeriod;
-  int get selectedYear => _selectedYear;
-  late List<int> _availableYears;
-  List<int> get availableYears => _availableYears;
-  // ["12-2-2023-a","13-4-2023-p",.....]
-
-  List<String> bookedDaysAtMonth = [];
-
-
-  void getBookedDaysAtMonth() {
-    bookedDaysAtMonth = [];
-    for (final element in dummyBookings) {
-      final List<String> info = element.split("-");
-      if (info[1] == (selectedMonth.index + 1).toString() &&
-          info[2] == selectedYear.toString() &&
-          info[3] == _selectedPeriod.toString()) {
-        bookedDaysAtMonth.add(info[0]);
-      }
+  getCalendarBookings() async {
+    final bookingController = Get.find<BookingsController>();
+    calendarBookings = [];
+    ApiResponse apiResponse = await bookingsRepo.getCalendarBookings(
+        chaletId: bookingController.selectedChaletId,
+        year: selectedYear,
+        month: (selectedMonth.index + 1),
+        period: selectedPeriod.name);
+    if (apiResponse.response != null &&
+        apiResponse.response!.statusCode == 200 &&
+        apiResponse.response!.data["error"] == false) {
+      calendarBookings = (apiResponse.response!.data["data"] as List)
+          .map((booking) => CalendarBookingModel.fromJson(booking))
+          .toList();
+      update();
+      return true;
+    } else {
+      update();
+      ApiChecker.checkApi(apiResponse);
     }
+
+    return false;
   }
+
+  Future<bool> getMyChaletsAndCalendarBookings() async {
+    final bookingController = Get.find<BookingsController>();
+    final bool result = await bookingController.getChaletIdWithName();
+    if (result) {
+      getCalendarBookings();
+      return true;
+    }
+    return false;
+  }
+
+  CalendarController() {
+    selectedMonth = Month.values[DateTime.now().month - 1];
+    selectedYear = DateTime.now().year;
+    final year = DateTime.now().year;
+    selectedPeriod = BookingPeriod.morning;
+    availableYears = [year, year + 1];
+  }
+
+  // void getBookedDaysAtMonth() {
+  //   bookedDaysAtMonth = [];
+  //   for (final element in dummyBookings) {
+  //     final List<String> info = element.split("-");
+  //     if (info[1] == (selectedMonth.index + 1).toString() &&
+  //         info[2] == selectedYear.toString() &&
+  //         info[3] == selectedPeriod.toString()) {
+  //       bookedDaysAtMonth.add(info[0]);
+  //     }
+  //   }
+  // }
 
   void changeDayStatus(String day) {
-    final String input = "$day-${selectedMonth.index+1}";
+    final String input = "$day-${selectedMonth.index + 1}";
     update();
   }
 
   void selectCalendarMonth(Month? month) {
     if (month == null) return;
-    _selectedMonth = month;
-    getBookedDaysAtMonth();
-    update();
+    selectedMonth = month;
+    getCalendarBookings();
   }
 
   void selectYear(int? year) {
     if (year == null) return;
-    _selectedYear = year;
-    getBookedDaysAtMonth();
-    update();
-  }
-  void changeSelectedPeriod(String period){
-    _selectedPeriod = period;
-    getBookedDaysAtMonth();
-    update();
+    selectedYear = year;
+    getCalendarBookings();
   }
 
-  final List<String> dummyBookings = [
-    "12-6-2023-a",
-    "13-6-2023-a",
-    "28-6-2023-p",
-    "18-6-2023-p",
-    "20-3-2023-a",
-    "1-7-2023-a",
-    "5-12-2023-p",
-    "25-1-2023-a",
-    "29-2-2023-a",
-    "3-3-2023-a",
-    "12-3-2023-p",
-  ];
+  void changeSelectedChalet(int? chaletId) {
+    final bookingController = Get.find<BookingsController>();
+    bookingController.changeSelectedChalet(chaletId);
+    getCalendarBookings();
+
+  }
 }

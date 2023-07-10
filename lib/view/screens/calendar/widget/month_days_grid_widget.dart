@@ -6,15 +6,16 @@ import '../../../../helper/helper.dart';
 import '../../../../utill/color_manager.dart';
 
 class MonthDaysGridWidget extends StatelessWidget {
-  const MonthDaysGridWidget({Key? key,
-    required this.monthDaysCount,
-    required this.bookedDays,
-    required this.month,
-     required this.selectFunc})
+  const MonthDaysGridWidget(
+      {Key? key,
+      required this.monthDaysCount,
+      required this.bookedDays,
+      required this.selectFunc,
+      required this.dateTime})
       : super(key: key);
   final int monthDaysCount;
-  final List<String> bookedDays;
-  final int month;
+  final DateTime dateTime;
+  final List<int> bookedDays;
   final void Function(String day) selectFunc;
 
   @override
@@ -27,17 +28,16 @@ class MonthDaysGridWidget extends StatelessWidget {
               crossAxisCount: 6, childAspectRatio: 47 / 54),
           itemCount: monthDaysCount,
           itemBuilder: (context, index) {
-            final bool isBooked = bookedDays.contains((index + 1).toString());
+            final bool isBooked = bookedDays.contains((index + 1));
             return SingleDayWidget(
-                selectFunc:selectFunc,
+                selectFunc: selectFunc,
                 backgroundColor: isBooked
                     ? ColorManager.complementaryColor
                     : ColorManager.white1,
-                textColor: isBooked
-                    ? Colors.white
-                    : ColorManager.blackTextColor,
+                textColor:
+                    isBooked ? Colors.white : ColorManager.blackTextColor,
                 dayNumber: index + 1,
-                dayName: Helper.getDayNameFromIndex(index, "saturday", month));
+                dayName: Helper.getDayNameFromDate(dateTime,index+1));
           }),
     );
   }

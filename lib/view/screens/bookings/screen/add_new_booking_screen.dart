@@ -90,7 +90,7 @@ class AddNewBookingScreen extends StatelessWidget {
                             "${controller.bookingDate?.day}-${controller.bookingDate?.month}-${controller.bookingDate?.year}",
                             style: style_400_16(Theme.of(context).primaryColor),
                           )
-                        : Text("00-00-00"),
+                        : const Text("00-00-00"),
                     TextButton(
                         onPressed: () => controller.pickdate(context),
                         child: Text(locale.change_date))

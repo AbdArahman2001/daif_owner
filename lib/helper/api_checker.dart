@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:daif_owner/data/local/my_shared_pref.dart';
 import 'package:daif_owner/routes/app_pages.dart';
 import 'package:dio/dio.dart';
@@ -55,19 +57,18 @@ class ApiChecker {
                 break;
             }
           } else if (apiResponse.error is FormatException) {
-
             errorMessage = (apiResponse.error as FormatException).message;
           }else{
             errorMessage = "UnKnown";
           }
         } else {
-          errorMessage = "unknown";
+          errorMessage = apiResponse.error.toString();
         }
       }
     } on Exception catch (e) {
       errorMessage = e.toString();
     }
-
+    log("---------------------------- Api Checker:\n$errorMessage");
     CustomSnackBar.instance.showCustomErrorToast(message: errorMessage);
   }
 
