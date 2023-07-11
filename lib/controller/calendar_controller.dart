@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:daif_owner/controller/my_places_controller.dart';
+import 'package:daif_owner/data/model/response/booking_model.dart';
 import 'package:daif_owner/data/model/response/booking_time_model.dart';
 import 'package:daif_owner/data/model/response/calendar_booking_model.dart';
 import 'package:get/get.dart';
@@ -15,11 +16,28 @@ class CalendarController extends GetxController {
   final BookingRepo bookingsRepo = BookingRepo.instance;
   late Month selectedMonth;
   late int selectedYear;
-  late BookingPeriod selectedPeriod;
   late List<int> availableYears;
+
   // List<String> bookedDaysAtMonth = [];
   List<CalendarBookingModel> calendarBookings = [];
   bool isLoading = false;
+  BookingModel? currentBookingModel;
+
+  Future<bool> getBookingInfo(int bookingId) async {
+    ApiResponse apiResponse = await bookingsRepo.getBookingInfo(bookingId);
+    if (apiResponse.response != null &&
+        apiResponse.response!.statusCode == 200 &&
+        apiResponse.response!.data["error"] == false) {
+      currentBookingModel =
+          BookingModel.fromJson(apiResponse.response!.data["data"]);
+      return true;
+    } else {
+      ApiChecker.checkApi(apiResponse);
+      return false;
+    }
+
+    return false;
+  }
 
   getCalendarBookings() async {
     final bookingController = Get.find<BookingsController>();
@@ -28,7 +46,7 @@ class CalendarController extends GetxController {
         chaletId: bookingController.selectedChaletId,
         year: selectedYear,
         month: (selectedMonth.index + 1),
-        period: selectedPeriod.name);
+        period: bookingController.selectedBookingPeriod.name);
     if (apiResponse.response != null &&
         apiResponse.response!.statusCode == 200 &&
         apiResponse.response!.data["error"] == false) {
@@ -59,7 +77,6 @@ class CalendarController extends GetxController {
     selectedMonth = Month.values[DateTime.now().month - 1];
     selectedYear = DateTime.now().year;
     final year = DateTime.now().year;
-    selectedPeriod = BookingPeriod.morning;
     availableYears = [year, year + 1];
   }
 
@@ -74,11 +91,6 @@ class CalendarController extends GetxController {
   //     }
   //   }
   // }
-
-  void changeDayStatus(String day) {
-    final String input = "$day-${selectedMonth.index + 1}";
-    update();
-  }
 
   void selectCalendarMonth(Month? month) {
     if (month == null) return;
@@ -96,6 +108,5 @@ class CalendarController extends GetxController {
     final bookingController = Get.find<BookingsController>();
     bookingController.changeSelectedChalet(chaletId);
     getCalendarBookings();
-
   }
 }

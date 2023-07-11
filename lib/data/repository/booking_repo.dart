@@ -12,11 +12,21 @@ class BookingRepo {
   static final instance = BookingRepo._();
   final DioClient dioClient = DioClient.dioClient;
 
+  getBookingInfo(int bookingId) async {
+    try {
+      Response response = await dioClient.get(
+          "/owner/booking/$bookingId");
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(e);
+    }
+  }
+
   getCalendarBookings(
       {required int chaletId,
-      required int year,
-      required int month,
-      required String period}) async {
+        required int year,
+        required int month,
+        required String period}) async {
     try {
       Response response = await dioClient.get(
           "/owner/chalet/$chaletId/booking/get-calendar?year=$year&month=$month&period=$period");

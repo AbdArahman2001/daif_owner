@@ -1,7 +1,9 @@
+import 'package:daif_owner/data/model/response/calendar_booking_model.dart';
 import 'package:daif_owner/view/screens/calendar/widget/single_day_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../../../../data/model/response/booking_time_model.dart';
 import '../../../../helper/helper.dart';
 import '../../../../utill/color_manager.dart';
 
@@ -10,13 +12,13 @@ class MonthDaysGridWidget extends StatelessWidget {
       {Key? key,
       required this.monthDaysCount,
       required this.bookedDays,
-      required this.selectFunc,
-      required this.dateTime})
+      required this.dateTime,
+      required this.bookings})
       : super(key: key);
   final int monthDaysCount;
-  final DateTime dateTime;
+  final DateTime dateTime; // selected_year/selected_month/1
   final List<int> bookedDays;
-  final void Function(String day) selectFunc;
+  final List<CalendarBookingModel> bookings;
 
   @override
   Widget build(BuildContext context) {
@@ -29,15 +31,19 @@ class MonthDaysGridWidget extends StatelessWidget {
           itemCount: monthDaysCount,
           itemBuilder: (context, index) {
             final bool isBooked = bookedDays.contains((index + 1));
+            final calendarBooking = isBooked
+                ? bookings.firstWhere((booking) => booking.day == index + 1)
+                : null;
             return SingleDayWidget(
-                selectFunc: selectFunc,
-                backgroundColor: isBooked
-                    ? ColorManager.complementaryColor
-                    : ColorManager.white1,
+                bookingModel: calendarBooking,
+                isBooked: isBooked,
                 textColor:
                     isBooked ? Colors.white : ColorManager.blackTextColor,
-                dayNumber: index + 1,
-                dayName: Helper.getDayNameFromDate(dateTime,index+1));
+                bookingDate: BookingDateModel(
+                    year: dateTime.year,
+                    month: dateTime.month,
+                    day: index + 1),
+                dayName: Helper.getDayNameFromDate(dateTime, index + 1));
           }),
     );
   }

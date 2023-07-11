@@ -54,7 +54,7 @@ class PendingBookingShortInfoWidget extends StatelessWidget {
             ),
             PlaceImgAndNameWidget(
                 placeName: bookingModel.customerName,
-                bookingPrice: bookingModel.bookingPrice),
+                bookingPrice: bookingModel.bookingPrice, paidAmount: bookingModel.paidAmount,),
             SizedBox(
               height: 8.h,
             ),

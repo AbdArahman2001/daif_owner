@@ -130,6 +130,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                           height: 8.h,
                         ),
                         MonthDaysGridWidget(
+                          bookings: calendarController.calendarBookings,
                           monthDaysCount: calendarController.selectedMonth
                               .getDaysCount(calendarController.selectedYear),
                           bookedDays: calendarController.calendarBookings
@@ -137,7 +138,6 @@ class _CalendarScreenState extends State<CalendarScreen> {
                               .toList(),
                           dateTime: DateTime(calendarController.selectedYear,
                               (calendarController.selectedMonth.index + 1), 1),
-                          selectFunc: calendarController.changeDayStatus,
                         ),
                       ],
                     ),

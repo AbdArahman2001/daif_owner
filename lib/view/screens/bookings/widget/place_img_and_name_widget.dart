@@ -9,10 +9,11 @@ class PlaceImgAndNameWidget extends StatelessWidget {
   const PlaceImgAndNameWidget(
       {Key? key,
       required this.placeName,
-      required this.bookingPrice})
+      required this.bookingPrice, required this.paidAmount})
       : super(key: key);
   final String placeName;
-  final double bookingPrice;
+  final num bookingPrice;
+  final num paidAmount;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +30,11 @@ class PlaceImgAndNameWidget extends StatelessWidget {
             Text(
               "$bookingPrice\$",
               style: style_500_14(ColorManager.complementaryColor),
-            )
+            ),
+            Text(
+              "$paidAmount\$",
+              style: style_500_14(ColorManager.complementaryColor),
+            ),
           ],
         )
       ],

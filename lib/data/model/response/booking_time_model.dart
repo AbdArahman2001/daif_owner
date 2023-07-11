@@ -20,9 +20,9 @@ extension BookingPeriodInfo on BookingPeriod{
 }
 
 class BookingDateModel {
-  final String year; //"day-month-year-period" period: a:AM, p: PM
-  final String month;
-  final String day;
+  final int year; //"day-month-year-period" period: a:AM, p: PM
+  final int month;
+  final int day;
 
   BookingDateModel(
       {required this.year,
@@ -32,22 +32,22 @@ class BookingDateModel {
   factory BookingDateModel.fromStringInfo(String strInfo) {
     final infoList = strInfo.split("-");
     return BookingDateModel(
-        year: infoList[2],
-        month: infoList[1],
-        day: infoList[0],
+        year: int.parse(infoList[2]),
+        month: int.parse(infoList[1]),
+        day:int.parse(infoList[0]),
         );
   }
 
   factory BookingDateModel.fromDateTime(DateTime bookingDate){
-    return BookingDateModel(year: bookingDate.year.toString(), month: bookingDate.month.toString(), day: bookingDate.day.toString());
+    return BookingDateModel(year: bookingDate.year, month: bookingDate.month, day: bookingDate.day);
   }
 
   String toStringInfo() {
     return [year, month, day].join("-");
   }
 
-  String toFormattedTime() {
-    return DateConverter.localDateToIsoString(DateTime(
-        int.parse(year), int.parse(month), int.parse(day), bookingHour));
+
+  DateTime toDateTime(){
+    return DateTime(year,month,day);
   }
 }

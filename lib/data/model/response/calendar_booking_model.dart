@@ -5,7 +5,7 @@ class CalendarBookingModel {
   final String customerPhoneNumber;
   final num paidAmount;
   final num bookingPrice;
-  final String status;
+  final String? status;
 
   CalendarBookingModel({
     required this.id,
@@ -14,7 +14,7 @@ class CalendarBookingModel {
     required this.customerPhoneNumber,
     required this.paidAmount,
     required this.bookingPrice,
-    required this.status,
+    this.status
   });
 
   factory CalendarBookingModel.fromJson(Map<String, dynamic> json) {

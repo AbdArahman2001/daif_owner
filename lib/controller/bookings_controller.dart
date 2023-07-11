@@ -23,7 +23,6 @@ class BookingsController extends GetxController {
     numberOfPersonsControllers = TextEditingController();
   }
 
-  final calendarController = Get.find<CalendarController>();
   final BookingRepo bookingsRepo = BookingRepo.instance;
 
   late final TextEditingController customerNameController;
@@ -192,9 +191,14 @@ class BookingsController extends GetxController {
   }
 
   changeSelectedPeriod(BookingPeriod? period) {
+    final calendarController = Get.find<CalendarController>();
     if (period != null) {
       selectedBookingPeriod = period;
       calendarController.getCalendarBookings();
     }
+  }
+
+  setBookingDate(BookingDateModel bookingDateModel){
+    bookingDate = bookingDateModel.toDateTime();
   }
 }
