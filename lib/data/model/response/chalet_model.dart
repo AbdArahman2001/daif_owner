@@ -72,6 +72,16 @@ final String videoLink;
           .map((service) => ServiceModel.fromMap(service as Map<String, dynamic>))),
     );
   }
+  Map<String, dynamic> toUpdatedChalet() {
+    return {
+      'name': name,
+      'price': price.toMap(),
+      'description': description,
+      'video_link': videoLink,
+      'services_ids': services.map((service) => service.id).toList(),
+    };
+  }
+
 }
 
 

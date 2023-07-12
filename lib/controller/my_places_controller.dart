@@ -42,6 +42,10 @@ class MyPlacesController extends GetxController {
   List<int> selectedServicesIds = [];
   List<ServiceModel> allAvailableServices = [];
 
+  updateChalet()async{
+
+  }
+
   getAllAvailableServices() async {
     allAvailableServices = [];
     isLoading = true;
@@ -107,7 +111,7 @@ class MyPlacesController extends GetxController {
 
   Future<void> _addChaletAttachment() async {
     ApiResponse apiResponse =
-        await myPlacesRepo.addChaletAttachment(pickedImages, currentChalet!.id);
+        await myPlacesRepo.addChaletAttachment(pickedImages, licenceImage,currentChalet!.id);
     if (apiResponse.response != null &&
         apiResponse.response!.statusCode == 200 &&
         apiResponse.response!.data["error"] == false) {

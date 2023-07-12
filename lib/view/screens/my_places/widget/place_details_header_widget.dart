@@ -36,7 +36,7 @@ class PlaceDetailsHeaderWidget extends StatelessWidget {
                 imageWidth: 360.w,
                 imageHeight: 360.h,
                 horizontalMargin: 0,
-                viewportFraction: 1,
+                viewportFraction:1,
                 enlargeCenterPage: false),
           ),
           Column(
@@ -54,7 +54,7 @@ class PlaceDetailsHeaderWidget extends StatelessWidget {
                         icon: const Icon(Icons.arrow_back_ios)),
                     IconButton(onPressed: () {}, icon: const Icon(Icons.share)),
                   const  Expanded(child: SizedBox()),
-                    TextButton.icon(icon:Icon(Icons.edit,color: ColorManager.whiteColor,),onPressed: (){},
+                    TextButton.icon(icon:Icon(Icons.edit),onPressed: (){},
                     label: Text(locale.edit,style:style_500_18( ColorManager.whiteColor))),
                     SizedBox(width: 10.w,),
 
@@ -104,24 +104,24 @@ class PlaceDetailsHeaderWidget extends StatelessWidget {
                         Row(
                           children: [
                             Text(
-                              "\$120",
+                              chalet.price.morning.toString(),
                               style: Theme.of(context).textTheme.titleSmall,
                             ),
                             Text(
-                              "/Night",
-                              style: Theme.of(context).textTheme.bodySmall,
+                             " /${locale.morning}",
+                              style: Theme.of(context).textTheme.bodyLarge,
                             ),
                           ],
                         ),
                         Row(
                           children: [
                             Text(
-                              "\$120",
+                              chalet.price.evening.toString(),
                               style: Theme.of(context).textTheme.titleSmall,
                             ),
                             Text(
-                              "/Evening",
-                              style: Theme.of(context).textTheme.bodySmall,
+                              " /${locale.evening}",
+                              style: Theme.of(context).textTheme.bodyLarge,
                             ),
                           ],
                         ),

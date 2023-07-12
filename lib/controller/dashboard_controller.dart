@@ -30,7 +30,6 @@ class DashBoardController extends GetxController {
       Icons.format_list_bulleted,
       Icons.calendar_month,
       Icons.chalet,
-      Icons.bar_chart,
     ];
   }
 
@@ -38,22 +37,19 @@ class DashBoardController extends GetxController {
     this.pageIndex = pageIndex;
     switch(pageIndex){
       case 0:
-        currentPage = BookingsScreen();
+        currentPage = const BookingsScreen();
         break;
       case 1:
         final controller = Get.find<CalendarController>();
         final bool result = await controller.getMyChaletsAndCalendarBookings();
         if(result) {
-          currentPage = CalendarScreen();
+          currentPage = const CalendarScreen();
         }
         break;
       case 2:
         final controller = Get.find<MyPlacesController>();
         controller.getAllChalets();
-        currentPage = ChaletsScreen();
-        break;
-      case 3:
-        currentPage = Scaffold();
+        currentPage = const ChaletsScreen();
         break;
     }
     update();

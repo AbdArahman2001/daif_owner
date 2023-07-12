@@ -15,19 +15,19 @@ class SingleServiceWidget extends StatelessWidget {
     return Column(
       children: [
         Container(
-          width: 54.w,
-          height: 54.h,
+          width: 70.w,
+          height: 70.h,
           padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 20.w),
           margin: EdgeInsets.symmetric(horizontal: 14.w),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12.r),
               border: Border.all(color: ColorManager.borderColor)),
-          child: CustomCachedNetworkImage(imageUrl: service.icon,),
+          child: CustomCachedNetworkImage(imageUrl: service.icon,width: 60,height: 60,),
         ),
         SizedBox(
           height: 12.h,
         ),
-        Text(DataConverter.key2NameService(context, service.icon))
+        Text( service.name)
       ],
     );
   }

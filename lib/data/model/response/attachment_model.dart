@@ -1,7 +1,8 @@
 class AttachmentModel {
  final int id;
  final  String path;
- final  String tag;
+ final  String tag; // for chalet: "place_image", "license", "chalet_main_image",
+                    // for booking: "booking_attachment"
 
 
   AttachmentModel({

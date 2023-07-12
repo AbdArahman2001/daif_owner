@@ -15,9 +15,9 @@ final double? width;
       fit: BoxFit.fill,
       imageUrl: imageUrl,
       placeholder: (_, __) =>
-          Image.asset(ImageAssets.placeHolderImg,fit: BoxFit.cover,),
+          Image.asset(ImageAssets.placeHolderImg,fit: BoxFit.cover,width: width,height: height,),
       errorWidget: (_, __, ___) =>
-          Image.asset(ImageAssets.placeHolderImg,fit: BoxFit.cover,),
+          Image.asset(ImageAssets.placeHolderImg,fit: BoxFit.cover,width: width,height: height,),
     );
   }
 }

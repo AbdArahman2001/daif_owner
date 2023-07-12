@@ -27,6 +27,7 @@ class SingleSliderWidget extends StatelessWidget {
           child: ClipRRect(
             borderRadius: BorderRadius.circular(borderRadius??16.r),
             child: CachedNetworkImage(
+              width: imageWidth,
               imageUrl: imagePath,
               placeholder: (context, _) =>const PlaceHolderWidget(),
               errorWidget: (context,_,s)=>const PlaceHolderWidget(),
@@ -43,7 +44,7 @@ class PlaceHolderWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return  Image.asset(
       ImageAssets.placeHolderImg,
-      fit: BoxFit.fill,
+      fit: BoxFit.cover,
     );
   }
 }

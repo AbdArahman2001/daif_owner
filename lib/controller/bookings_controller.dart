@@ -101,16 +101,17 @@ class BookingsController extends GetxController {
     }
   }
 
-  Future<bool> _addBookingAttachments(int bookingId) async {
+  Future<void> _addBookingAttachments(int bookingId) async {
+    if(chosenBookingAttachments.isEmpty){
+      return;
+    }
     ApiResponse apiResponse = await bookingsRepo.addBookingAttachments(
-        bookingId, chosenBookingAttachments!);
+        bookingId, chosenBookingAttachments);
     if (apiResponse.response != null &&
         apiResponse.response!.statusCode == 200 &&
         apiResponse.response!.data["error"] == false) {
-      return true;
     } else {
       ApiChecker.checkApi(apiResponse);
-      return false;
     }
   }
 

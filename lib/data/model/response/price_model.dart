@@ -1,6 +1,6 @@
 class PriceModel {
-  double morning;
-  double evening;
+  num morning;
+  num evening;
 
   PriceModel({
     required this.morning,

@@ -69,7 +69,11 @@ class SingleDayWidget extends StatelessWidget {
         } else {
           final controller = Get.find<BookingsController>();
           controller.setBookingDate(bookingDate);
-          Get.toNamed(Routes.addNewBooking);
+          Get.toNamed(Routes.addNewBooking)?.then((value) async{
+            final controller = Get.find<CalendarController>();
+            await controller.getMyChaletsAndCalendarBookings();
+          });
+
         }
       },
       child: Container(

@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:daif_owner/controller/bookings_controller.dart';
+import 'package:daif_owner/routes/app_pages.dart';
 import 'package:daif_owner/utill/color_manager.dart';
 import 'package:daif_owner/utill/styles_manager.dart';
 import 'package:daif_owner/view/basewidget/button/custom_elevated_button.dart';
@@ -226,7 +227,7 @@ class AddNewBookingScreen extends StatelessWidget {
                 CustomElevatedButton(
                     onPressed: () async {
                       await controller.createNewBookingWithItsAttachments();
-                      Get.back();
+                      Get.back<bool>();
                     },
                     child: Text(locale.save)),
                 SizedBox(

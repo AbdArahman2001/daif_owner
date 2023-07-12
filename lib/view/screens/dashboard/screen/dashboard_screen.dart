@@ -25,7 +25,6 @@ class DashboardScreen extends StatelessWidget {
       locale.bookings,
       locale.calendar,
       locale.places,
-      locale.statistics
     ];
     return GetBuilder<DashBoardController>(builder: (controller){
       return WillPopScope(

@@ -31,40 +31,24 @@ class PlaceDetailsScreen extends StatelessWidget {
         builder: (controller) {
           return controller.currentChaletAttachments != null &&
                   controller.currentChalet != null
-              ? Hero(
-                  tag: controller.currentChaletAttachments != null &&
-                          controller.currentChaletAttachments!.isNotEmpty
-                      ? controller.currentChaletAttachments!.first.id
-                      : "",
-                  child: Column(
-                    children: [
-                      PlaceDetailsHeaderWidget(
-                        chalet: controller.currentChalet!,
-                        attachments: controller.currentChaletAttachments!,
-                      ),
-                      Expanded(
-                        child: SingleChildScrollView(
-                          child: Column(
-                            children: [
-                              SizedBox(
-                                height: 20.h,
-                              ),
-                              _TabBarWidget(
-                                changeTab:
-                                    controller.setSelectedDetailsTabIndex,
-                                selectedIndex:
-                                    controller.getSelectedDetailsTabIndex,
-                              ),
-                              PlaceDetailsWidget(
-                                chalet: controller.currentChalet!,
-                              ),
-                            ],
-                          ),
-                        ),
-                      )
-                    ],
+              ? Column(
+                children: [
+                  PlaceDetailsHeaderWidget(
+                    chalet: controller.currentChalet!,
+                    attachments: controller.currentChaletAttachments!,
                   ),
-                )
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Expanded(
+                      child: SingleChildScrollView(
+                        child: PlaceDetailsWidget(
+                          chalet: controller.currentChalet!,
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              )
               : const Center(
                   child: CircularProgressIndicator(),
                 );

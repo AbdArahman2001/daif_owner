@@ -15,6 +15,18 @@ class MyPlacesRepo {
   final DioClient dioClient = DioClient.dioClient;
   final sharedPreferences = MySharedPref.instance;
 
+  updateChalet(int chaletId,ChaletModel chalet) async {
+    try {
+      Response response = await dioClient.put(
+        "/owner/chalet/$chaletId/update",
+        data:chalet.toUpdatedChalet()
+      );
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(e);
+    }
+  }
+
   getAllChalets() async {
     try {
       Response response = await dioClient.get(
@@ -49,17 +61,31 @@ class MyPlacesRepo {
     }
   }
 
-  addChaletAttachment(List<XFile> images, int chaletId) async {
+  addChaletAttachment(
+      List<XFile> images, XFile? licenseImage, int chaletId) async {
     try {
-      List<MultipartFile> files = [];
-      for (final image in images) {
-        String fileName = image.path.split('/').last;
-        files.add(
-          await MultipartFile.fromFile(
-            image.path,
+      List<Map<String, dynamic>> files = [];
+      for (int i = 0; i < images.length; i++) {
+        String fileName = images[i].path.split('/').last;
+        files.add({
+          "image": await MultipartFile.fromFile(
+            images[i].path,
             filename: fileName,
           ),
-        );
+          "tag": i == 0 ? "chalet_main_image" : "place_image",
+        });
+      }
+      // license image
+      if(licenseImage!=null) {
+        files.add(({
+          "image": await MultipartFile.fromFile(
+            licenseImage.path,
+            filename: licenseImage.path
+                .split('/')
+                .last,
+          ),
+          "tag": "license",
+        }));
       }
       FormData data = FormData.fromMap({"images": files});
 

@@ -1,4 +1,5 @@
 import 'package:daif_owner/view/screens/my_places/widget/place_services_widget.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -16,39 +17,17 @@ class PlaceDetailsWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final locale = MyLocalizations.translate(context);
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
           padding: EdgeInsets.symmetric(horizontal: 20.w),
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            const CustomDividerWidget(),
             SizedBox(
               height: 20.h,
             ),
             Text(
              chalet.description ,
               style: Theme.of(context).textTheme.bodyMedium,
-            ),
-            SizedBox(
-              height: 12.h,
-            ),
-            Row(
-              children: [
-                Icon(
-                  Icons.person,
-                  color: Theme.of(context).primaryColor,
-                ),
-                SizedBox(
-                  width: 4.w,
-                ),
-                Text(
-                  "2 ${locale.person}",
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyMedium!
-                      .copyWith(color: ColorManager.blackTextColor),
-                ),
-
-              ],
             ),
 
           ]),
