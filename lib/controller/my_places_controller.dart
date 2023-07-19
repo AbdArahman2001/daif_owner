@@ -32,6 +32,7 @@ class MyPlacesController extends GetxController {
   final TextEditingController pollMaxDepthController = TextEditingController();
   final TextEditingController videoLinkController = TextEditingController();
 
+  bool isDataEdited = false;
   List<XFile> pickedImages = [];
   Governorate _selectedGovernorate = Governorate.gaza;
   XFile? licenceImage;
@@ -44,7 +45,11 @@ class MyPlacesController extends GetxController {
   List<int> selectedServicesIds = [];
   List<ServiceModel> allAvailableServices = [];
 
+  raiseEditingFlag(String? input){
+    isDataEdited = true;
+  }
   setFieldsWithData() async {
+    isDataEdited = false;
     getAllAvailableServices();
     selectedServicesIds =
         currentChalet?.services.map((service) => service.id).toList() ?? [];
@@ -304,6 +309,7 @@ class MyPlacesController extends GetxController {
 
   // select/unselect
   changeServiceStatus(int serviceId) {
+    raiseEditingFlag(null);
     if (selectedServicesIds.contains(serviceId)) {
       selectedServicesIds.remove(serviceId);
     } else {
@@ -313,13 +319,14 @@ class MyPlacesController extends GetxController {
   }
 
   void removeImage(int index) {
-    print("index : $index");
+    raiseEditingFlag(null);
     pickedImages.removeAt(index);
     update();
   }
 
   void setGovernorate(Governorate? governorate) {
     if (governorate == null) return;
+    raiseEditingFlag(null);
     _selectedGovernorate = governorate;
     update();
   }
@@ -329,6 +336,7 @@ class MyPlacesController extends GetxController {
     XFile? image = await imagePicker.pickImage(
         source: source, imageQuality: Helper.getImageQuality(source));
     if (image != null) {
+      raiseEditingFlag(null);
       licenceImage = image;
       update();
     }
@@ -340,6 +348,7 @@ class MyPlacesController extends GetxController {
       List<XFile> images = await imagePicker.pickMultiImage(
           imageQuality: Helper.getImageQuality(source));
       if (images.isNotEmpty) {
+        raiseEditingFlag(null);
         pickedImages.insertAll(0, images);
         if (pickedImages.length > 6) {
           pickedImages = pickedImages.sublist(0, 6);
@@ -350,6 +359,7 @@ class MyPlacesController extends GetxController {
           source: ImageSource.camera,
           imageQuality: Helper.getImageQuality(ImageSource.camera));
       if (image != null && pickedImages.length < 6) {
+        raiseEditingFlag(null);
         pickedImages.insert(0, image);
       }
     }

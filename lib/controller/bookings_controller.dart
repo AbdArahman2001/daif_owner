@@ -23,7 +23,7 @@ class BookingsController extends GetxController {
     paidAmountController = TextEditingController();
     numberOfPersonsControllers = TextEditingController();
   }
-
+  bool isDataEdited = false;
   final BookingRepo bookingsRepo = BookingRepo.instance;
   final pageViewController = PageController();
   late final TextEditingController customerNameController;
@@ -53,8 +53,12 @@ class BookingsController extends GetxController {
         .then((value) => getAllBookings(0));
   }
 
-  setFieldsWithData(BookingModel bookingModel) async {
+  raiseEditingFlag(String? input){
+    isDataEdited = true;
+  }
 
+  setFieldsWithData(BookingModel bookingModel) async {
+    isDataEdited = false;
     // text fields
     customerNameController.text = bookingModel.customerName ;
     phoneNumberController.text = bookingModel.customerPhoneNumber ;
@@ -213,8 +217,8 @@ class BookingsController extends GetxController {
   }
 
   void removeImage(int index) {
-    print("index : $index");
-    chosenBookingAttachments?.removeAt(index);
+    raiseEditingFlag(null);
+    chosenBookingAttachments.removeAt(index);
     update();
   }
 
@@ -224,6 +228,7 @@ class BookingsController extends GetxController {
       List<XFile> images = await imagePicker.pickMultiImage(
           imageQuality: Helper.getImageQuality(source));
       if (images.isNotEmpty) {
+        raiseEditingFlag(null);
         chosenBookingAttachments?.insertAll(0, images);
         if (chosenBookingAttachments != null &&
             chosenBookingAttachments!.length > 2) {
@@ -237,6 +242,7 @@ class BookingsController extends GetxController {
       if (image != null &&
           chosenBookingAttachments != null &&
           chosenBookingAttachments!.length < 6) {
+        raiseEditingFlag(null);
         chosenBookingAttachments!.insert(0, image);
       }
     }
@@ -250,6 +256,7 @@ class BookingsController extends GetxController {
         firstDate: DateTime((DateTime.now().year - 1)),
         lastDate: DateTime((DateTime.now().year + 1)));
     if (result != null) {
+      raiseEditingFlag(null);
       bookingDate = result;
       update();
     }
@@ -258,6 +265,7 @@ class BookingsController extends GetxController {
   changeSelectedPeriod(BookingPeriod? period) {
     final calendarController = Get.find<CalendarController>();
     if (period != null) {
+
       selectedBookingPeriod = period;
       calendarController.getCalendarBookings();
     }
@@ -265,6 +273,7 @@ class BookingsController extends GetxController {
 
   changeSelectedPeriodWithoutGetDate(BookingPeriod? period){
     if (period != null) {
+      raiseEditingFlag(null);
       selectedBookingPeriod = period;
       update();
     }

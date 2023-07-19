@@ -1,7 +1,7 @@
 import 'package:daif_owner/view/screens/auth/screen/otp_screen.dart';
 import 'package:daif_owner/view/screens/bookings/screen/add_or_update_booking_screen.dart';
 import 'package:daif_owner/view/screens/dashboard/screen/dashboard_screen.dart';
-import 'package:daif_owner/view/screens/my_places/screen/add_or_update_new_chalet_screen.dart';
+import 'package:daif_owner/view/screens/my_places/screen/add_or_update_chalet_screen.dart';
 import 'package:daif_owner/view/screens/onboarding/screen/on_boarding_screen.dart';
 import 'package:daif_owner/view/screens/profile/screen/contact_us_screen.dart';
 import 'package:daif_owner/view/screens/profile/screen/profile_screen.dart';
@@ -57,11 +57,11 @@ class AppPages {
     ),
     GetPage(
       name: Routes.addNewChalet,
-      page: () => const AddOrUpdateNewChaletScreen(isEditingMode: false,),
+      page: () => const AddOrUpdateChaletScreen(isEditingMode: false,),
     ),
     GetPage(
       name: Routes.updateChalet,
-      page: () => const AddOrUpdateNewChaletScreen(isEditingMode: true,),
+      page: () => const AddOrUpdateChaletScreen(isEditingMode: true,),
     ),
     GetPage(
       name: Routes.addNewBooking,
