@@ -2,6 +2,30 @@
 import 'package:flutter/material.dart';
 
 import '../localization/my_localizations.dart';
+enum LanguageType { arabic, english }
+
+extension LanguageInfo on LanguageType {
+  String getLanguageName(BuildContext context) {
+    final local = MyLocalizations.translate(context);
+    switch (this) {
+      case LanguageType.arabic:
+        return local.arabic;
+      case LanguageType.english:
+        return local.english;
+    }
+  }
+
+  String getLanguageCode() {
+    switch (this) {
+      case LanguageType.arabic:
+        return "ar";
+      case LanguageType.english:
+        return "en";
+    }
+  }
+}
+
+
 
 enum Month { jan, feb, mar, apr, may, jun, jul, aug, sep, oct, nov, dec }
 

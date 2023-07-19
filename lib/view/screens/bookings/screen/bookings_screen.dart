@@ -36,19 +36,25 @@ class BookingsScreen extends StatelessWidget {
                 height: 12.h,
               ),
               Expanded(
-                  child: SingleChildScrollView(
-                child: Column(
-                    children: controller.allBookings
-                        .map((booking) => PendingBookingShortInfoWidget(
-                            bookingModel: booking))
-                        .toList()),
-              ))
+                child: PageView.builder(
+                  controller: controller.pageViewController,
+                    onPageChanged: controller.changeSelectedStatus,
+                    itemBuilder: (context, index) {
+                  return SingleChildScrollView(
+                    child: Column(
+                        children: controller.allBookings
+                            .map((booking) => PendingBookingShortInfoWidget(
+                                bookingModel: booking))
+                            .toList()),
+                  );
+                }),
+              ),
             ],
           ),
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: ()async{
-            if(await controller.getChaletIdWithName()){
+          onPressed: () async {
+            if (await controller.getChaletIdWithName()) {
               Get.toNamed(Routes.addNewBooking);
             }
           },

@@ -54,7 +54,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                             height: 10.h,
                           ),
                           Container(
-                            padding: EdgeInsets.symmetric(horizontal: 24.w),
+                            // padding: EdgeInsets.symmetric(horizontal: 24.w),
                             decoration: BoxDecoration(
                                 color: Colors.black.withOpacity(.1),
                                 borderRadius: BorderRadius.circular(12)),
@@ -69,10 +69,13 @@ class _CalendarScreenState extends State<CalendarScreen> {
                                     .map((chalet) => DropdownMenuItem<int>(
                                         alignment: Alignment.centerLeft,
                                         value: chalet.id,
-                                        child: Text(
-                                          chalet.name,
-                                          style: style_500_16(
-                                              Theme.of(context).primaryColor),
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                                          child: Text(
+                                            chalet.name,
+                                            style: style_500_16(
+                                                Theme.of(context).primaryColor),
+                                          ),
                                         )))
                                     .toList(),
                                 onChanged:
@@ -90,6 +93,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                       ),
                     );
                   }),
+                  SizedBox(height: 12.h,),
                   Container(
                     padding:
                         EdgeInsets.symmetric(vertical: 12.h, horizontal: 12.w),
@@ -120,6 +124,9 @@ class _CalendarScreenState extends State<CalendarScreen> {
                               width: 12.w,
                             ),
                             YearSelectorWidget(controller: calendarController),
+                            SizedBox(
+                              width: 12.w,
+                            ),
                           ],
                         ),
                         SizedBox(

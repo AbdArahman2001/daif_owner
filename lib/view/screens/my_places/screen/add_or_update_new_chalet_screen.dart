@@ -17,15 +17,15 @@ import '../../../../helper/helper.dart';
 import '../../../../localization/my_localizations.dart';
 import '../../../basewidget/custom_app_bar.dart';
 
-class AddNewChaletScreen extends StatelessWidget {
-  const AddNewChaletScreen({Key? key}) : super(key: key);
-
+class AddOrUpdateNewChaletScreen extends StatelessWidget {
+  const AddOrUpdateNewChaletScreen({Key? key, required this.isEditingMode}) : super(key: key);
+final bool isEditingMode;
   @override
   Widget build(BuildContext context) {
     final locale = MyLocalizations.translate(context);
     return Scaffold(
       appBar: CustomAppBar(
-        title: locale.new_chalet,
+        title:isEditingMode?locale.edit: locale.new_chalet,
         actions: const SizedBox.shrink(),
         leading: IconButton(
           onPressed: () => Get.back(),
@@ -220,9 +220,9 @@ class AddNewChaletScreen extends StatelessWidget {
                   children: [
                     Expanded(
                       child: TextFormField(
-                        controller: controller.pollMinHeightController,
+                        controller: controller.pollMinDepthController,
                         decoration:
-                            InputDecoration(hintText: locale.min_height),
+                            InputDecoration(hintText: locale.min_depth),
                       ),
                     ),
                     SizedBox(
@@ -230,9 +230,9 @@ class AddNewChaletScreen extends StatelessWidget {
                     ),
                     Expanded(
                       child: TextFormField(
-                        controller: controller.pollMinWidthController,
+                        controller: controller.pollMaxDepthController,
                         decoration:
-                            InputDecoration(hintText: locale.max_height),
+                            InputDecoration(hintText: locale.max_depth),
                       ),
                     ),
                   ],
@@ -302,8 +302,8 @@ class AddNewChaletScreen extends StatelessWidget {
                   height: 40.h,
                 ),
                 CustomElevatedButton(
-                    onPressed: controller.createChaletWithAttachments,
-                    child: Text(locale.save)),
+                    onPressed: isEditingMode?controller.updateChaletAndAttachments:controller.createChaletWithAttachments,
+                    child: Text(isEditingMode?locale.update:locale.save)),
                 SizedBox(
                   height: 30.h,
                 ),

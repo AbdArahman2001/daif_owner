@@ -15,7 +15,7 @@ final controller = Get.find<MyPlacesController>();
   Widget build(BuildContext context) {
     return   InkWell(
       onTap: () {
-        Get.to(const PlaceDetailsScreen());
+        Get.to(()=>const PlaceDetailsScreen());
         controller.getChaletInfoAndAttachments(chaletShortInfo.id);
 
       },
@@ -32,6 +32,8 @@ final controller = Get.find<MyPlacesController>();
               child: CustomCachedNetworkImage(
                 imageUrl: chaletShortInfo.image.path,
                 height: 150.h,
+                width: double.infinity,
+                fit: BoxFit.cover,
               ),
             ),
             Row(

@@ -52,23 +52,22 @@ class _SingleTabBarItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16.r),
-            color: isSelected
-                ? ColorManager.tabIconColor
-                : Theme.of(context).dialogBackgroundColor),
-        padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 22.w),
-        alignment: Alignment.center,
-        child: InkWell(
-          onTap: () => onPressed(index),
-
+    return InkWell(
+      onTap: () => onPressed(index),
+      child: Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16.r),
+              color: isSelected
+                  ? ColorManager.tabIconColor
+                  : Theme.of(context).dialogBackgroundColor),
+          padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 22.w),
+          alignment: Alignment.center,
           child: Text(
             title,
             style: isSelected
                 ? style_600_14(Theme.of(context).primaryColor)
                 : style_500_14(ColorManager.unSelectedTextColor),
-          ),
-        ));
+          )),
+    );
   }
 }

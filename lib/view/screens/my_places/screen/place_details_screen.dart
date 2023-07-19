@@ -31,23 +31,23 @@ class PlaceDetailsScreen extends StatelessWidget {
         builder: (controller) {
           return controller.currentChaletAttachments != null &&
                   controller.currentChalet != null
-              ? Column(
-                children: [
-                  PlaceDetailsHeaderWidget(
-                    chalet: controller.currentChalet!,
-                    attachments: controller.currentChaletAttachments!,
-                  ),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Expanded(
-                      child: SingleChildScrollView(
+              ? SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      PlaceDetailsHeaderWidget(
+                        chalet: controller.currentChalet!,
+                        attachments: controller.getChaletImages(controller.currentChaletAttachments??[]),
+                      ),
+                      Align(
+                        alignment: Alignment.centerLeft,
                         child: PlaceDetailsWidget(
                           chalet: controller.currentChalet!,
+                          licenceImg: controller.getChaletLicenseImage(controller.currentChaletAttachments??[]),
                         ),
-                      ),
-                    ),
-                  )
-                ],
+                      )
+                    ],
+                  ),
               )
               : const Center(
                   child: CircularProgressIndicator(),

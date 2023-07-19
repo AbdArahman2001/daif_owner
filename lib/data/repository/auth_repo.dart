@@ -1,7 +1,10 @@
 import 'dart:developer';
 
+import 'package:daif_owner/view/screens/auth/screen/login_screen.dart';
 import 'package:dio/dio.dart';
+import 'package:get/get.dart' hide Response, FormData,MultipartFile;
 
+import '../../routes/app_pages.dart';
 import '../../utill/app_constants.dart';
 import '../local/my_shared_pref.dart';
 import '../model/response/base/api_response.dart';
@@ -18,6 +21,7 @@ class AuthRepo {
 
   sendOtp()async{
     try {
+      dioClient.updateHeaders();
       Response response = await dioClient.post(
         AppConstants.sendOtp,
         data: {}
@@ -74,10 +78,25 @@ class AuthRepo {
     }
   }
 
-  // for  user token
-  void saveUserInfo(Map<String, dynamic> userInfo) {
+  Future<ApiResponse> logout() async {
     try {
-      sharedPreferences.saveUserInfo(userInfo);
+      Response response = await dioClient.post(
+        AppConstants.logout,
+        data: {},
+      );
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(e);
+    }finally{
+      MySharedPref.instance.clearUserInfo();
+      Get.off(LoginScreen());
+    }
+  }
+
+  // for  user token
+  Future<void> saveUserInfo(Map<String, dynamic> userInfo)async {
+    try {
+      await sharedPreferences.saveUserInfo(userInfo);
     } catch (e) {
       rethrow;
     }

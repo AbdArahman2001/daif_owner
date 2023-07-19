@@ -5,7 +5,7 @@ import 'package:daif_owner/routes/app_pages.dart';
 import 'package:daif_owner/utill/color_manager.dart';
 import 'package:daif_owner/utill/styles_manager.dart';
 import 'package:daif_owner/view/basewidget/custom_app_bar.dart';
-import 'package:daif_owner/view/screens/my_places/screen/add_new_chalet_screen.dart';
+import 'package:daif_owner/view/screens/my_places/screen/add_or_update_new_chalet_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -25,7 +25,6 @@ class ChaletsScreen extends StatelessWidget {
         ),
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
-
           onPressed: () {
             controller.getAllAvailableServices();
             Get.toNamed(Routes.addNewChalet);
@@ -55,7 +54,7 @@ class ChaletsScreen extends StatelessWidget {
                     style: style_600_14(ColorManager.blackTextColor),
                   ),
                   TextButton(
-                      onPressed: () => Get.to(AddNewChaletScreen()),
+                      onPressed: () => Get.toNamed(Routes.addNewChalet),
                       child: Text(locale.add_first_chalet)),
                 ],
               )),

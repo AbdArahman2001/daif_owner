@@ -4,8 +4,10 @@ class AppConstants {
   static const  appName = 'Daif - Owner';
   static const  appVersion = '1.0.0';
   // API end points
-  static const  baseUrl = "http://46.101.71.155/api";
+  // static const  baseUrl = "http://46.101.71.155/api";
+  static const  baseUrl = "https://api.dayf-app.com/api";
   static const  loginUrl = '/owner/auth/login';
+  static const  logout = '/owner/logout';
   static const  registerUrl = '/owner/auth/register';
   static const  createChalet = '/owner/chalet/create';
   static const  getAllChalets = '/owner/chalet';

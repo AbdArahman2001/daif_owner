@@ -1,4 +1,5 @@
 import 'package:daif_owner/controller/auth_controller.dart';
+import 'package:daif_owner/controller/profile_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
@@ -38,6 +39,15 @@ class DashBoardBinding extends Bindings{
   @override
   void dependencies() {
     Get.lazyPut<DashBoardController>(() => DashBoardController());
+
+  }
+
+}
+
+class ProfileBinding extends Bindings{
+  @override
+  void dependencies() {
+    Get.lazyPut<ProfileController>(() => ProfileController());
 
   }
 

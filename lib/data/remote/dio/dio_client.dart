@@ -17,12 +17,11 @@ class DioClient {
   static final dioClient = DioClient._();
 
   DioClient._() {
-
     dio
       ..options.baseUrl = baseUrl
       ..options.headers = {
         "Accept": "application/json",
-        "Authorization": "Bearer ${userInfo?.accessToken?.split("_").last}"
+        "Authorization": "Bearer ${userInfo?.accessToken}"
       }
       ..options.connectTimeout = 60000
       ..options.receiveTimeout = 60000
@@ -137,6 +136,13 @@ class DioClient {
     } catch (e) {
       rethrow;
     }
+  }
+
+  void updateHeaders() {
+    dio.options.headers = {
+      "Accept": "application/json",
+      "Authorization": "Bearer ${userInfo?.accessToken}"
+    };
   }
 
 // void updateHeader({String? token, String? countryCode}) {

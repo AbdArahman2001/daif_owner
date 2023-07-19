@@ -3,16 +3,17 @@ import 'package:flutter/material.dart';
 
 import '../../utill/assets_manager.dart';
 class CustomCachedNetworkImage extends StatelessWidget {
-  const CustomCachedNetworkImage({Key? key, required this.imageUrl,  this.height,  this.width,}) : super(key: key);
+  const CustomCachedNetworkImage({Key? key, required this.imageUrl,  this.height,  this.width, this.fit,}) : super(key: key);
   final String imageUrl;
 final double? height;
 final double? width;
+final BoxFit? fit;
   @override
   Widget build(BuildContext context) {
     return CachedNetworkImage(
       width: width,
       height: height,
-      fit: BoxFit.fill,
+      fit: fit??BoxFit.fill,
       imageUrl: imageUrl,
       placeholder: (_, __) =>
           Image.asset(ImageAssets.placeHolderImg,fit: BoxFit.cover,width: width,height: height,),

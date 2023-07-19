@@ -1,5 +1,7 @@
 import 'package:booking_calendar/booking_calendar.dart';
 import 'package:daif_owner/controller/calendar_controller.dart';
+import 'package:daif_owner/controller/profile_controller.dart';
+import 'package:daif_owner/view/screens/profile/screen/profile_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -24,12 +26,14 @@ class DashBoardController extends GetxController {
     super.onInit();
     Get.lazyPut(() => MyPlacesController());
     Get.lazyPut(() => CalendarController());
+    Get.lazyPut(() => ProfileController());
     Get.put<BookingsController>(BookingsController(), permanent: true);
     currentPage = const BookingsScreen();
     tabBarIcons = [
       Icons.format_list_bulleted,
       Icons.calendar_month,
       Icons.chalet,
+      Icons.person
     ];
   }
 
@@ -50,6 +54,10 @@ class DashBoardController extends GetxController {
         final controller = Get.find<MyPlacesController>();
         controller.getAllChalets();
         currentPage = const ChaletsScreen();
+        break;
+      case 3:
+        Get.find<ProfileController>();
+        currentPage = const ProfileScreen();
         break;
     }
     update();

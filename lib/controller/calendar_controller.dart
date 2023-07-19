@@ -41,9 +41,10 @@ class CalendarController extends GetxController {
 
   getCalendarBookings() async {
     final bookingController = Get.find<BookingsController>();
+    if(bookingController.selectedChaletId == null) return null;
     calendarBookings = [];
     ApiResponse apiResponse = await bookingsRepo.getCalendarBookings(
-        chaletId: bookingController.selectedChaletId,
+        chaletId: bookingController.selectedChaletId!,
         year: selectedYear,
         month: (selectedMonth.index + 1),
         period: bookingController.selectedBookingPeriod.name);

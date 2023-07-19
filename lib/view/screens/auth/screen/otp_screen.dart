@@ -1,6 +1,8 @@
 import 'dart:developer';
 
 import 'package:daif_owner/controller/auth_controller.dart';
+import 'package:daif_owner/routes/app_pages.dart';
+import 'package:daif_owner/view/screens/auth/screen/resgister_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -60,15 +62,18 @@ class OtpScreen extends StatelessWidget {
                         ),
                       ),
                       SizedBox(
-                        height: 200.h,
+                        height: 100.h,
                       ),
                       CustomElevatedButton(
-                        child: Text("verfy"),
                         onPressed: authController.verifyOtp,
+                        child: const Text("verify"),
                       ),
                       SizedBox(
                         height: 46.h,
                       ),
+                      TextButton(
+                          onPressed: () => Get.off(()=>const RegisterScreen()),
+                          child: const Text("register"))
                     ]),
               )));
     });

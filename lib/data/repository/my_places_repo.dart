@@ -15,10 +15,23 @@ class MyPlacesRepo {
   final DioClient dioClient = DioClient.dioClient;
   final sharedPreferences = MySharedPref.instance;
 
-  updateChalet(int chaletId,ChaletModel chalet) async {
+  deleteAttachments(List<int> ids, int chaletId)async{
+
+    try {
+    Response response = await dioClient.delete(
+    "owner/chalet/$chaletId/attachment",
+    data:{"ids":ids}
+    );
+    return ApiResponse.withSuccess(response);
+    } catch (e) {
+    return ApiResponse.withError(e);
+    }
+  }
+
+  updateChalet(ChaletModel chalet) async {
     try {
       Response response = await dioClient.put(
-        "/owner/chalet/$chaletId/update",
+        "/owner/chalet/${chalet.id}/update",
         data:chalet.toUpdatedChalet()
       );
       return ApiResponse.withSuccess(response);

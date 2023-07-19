@@ -31,7 +31,7 @@ class SingleSliderWidget extends StatelessWidget {
               imageUrl: imagePath,
               placeholder: (context, _) =>const PlaceHolderWidget(),
               errorWidget: (context,_,s)=>const PlaceHolderWidget(),
-              fit: BoxFit.fill,
+              fit: BoxFit.cover,
             ),
           )),
     );

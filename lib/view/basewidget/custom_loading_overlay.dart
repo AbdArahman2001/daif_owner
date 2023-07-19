@@ -50,8 +50,7 @@ showLoadingOverLay({
 Widget _getLoadingIndicator({String? msg}) {
   return Container(
     padding: EdgeInsets.symmetric(
-      horizontal: 20.w,
-      vertical: 10.h,
+    vertical: 16.h,horizontal:20.w
     ),
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(10.r),
@@ -62,7 +61,8 @@ Widget _getLoadingIndicator({String? msg}) {
       children: [
         Image.asset(
           ImageAssets.logoImg,
-          height: 45.h,
+          height: 50.h,
+          width: 50.w,
         ),
         SizedBox(
           width: 8.h,

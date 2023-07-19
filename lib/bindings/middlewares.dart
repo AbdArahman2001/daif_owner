@@ -16,7 +16,7 @@ class AuthMiddleware extends GetMiddleware {
     //  null: register screen,
     //  login: dashboard screen,
     //  register: login screen
-    final TokenType? tokenType = MySharedPref.instance.getTokenType();
+    final TokenType? tokenType = userInfo?.tokenType;
     if (tokenType == null) {
       return const RouteSettings(name: Routes.register);
     }
@@ -26,7 +26,7 @@ class AuthMiddleware extends GetMiddleware {
     if (tokenType == TokenType.login) {
       return const RouteSettings(name: Routes.dashboard);
     }
-    return null; // remain at login screen;
+    return null; // will not reach at this line.
   }
 }
 

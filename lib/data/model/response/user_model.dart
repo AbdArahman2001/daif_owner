@@ -14,7 +14,8 @@ class UserModel {
   final dynamic image; // XFile or String
   final String governorateId;
   final String? accessToken;
-  final bool? verify;
+   bool? verify;
+   TokenType? tokenType;
 
   UserModel(
       {required this.fullName,
@@ -24,7 +25,7 @@ class UserModel {
       this.accessToken,
       required this.image,
       required this.verify,
-      required this.governorateId});
+      required this.governorateId,this.tokenType});
 
   factory UserModel.fromLocaleJson(Map<String, dynamic> json) {
     return UserModel(
@@ -35,7 +36,22 @@ class UserModel {
       image: json["image"],
       verify: json["verify"],
       governorateId: json["governorate_id"],
+      tokenType: TokenTypeInfo.getTokenTypeFromName(json["token_type"]) ,
     );
+  }
+
+  Map<String, dynamic> toLocaleJson(TokenType tokenType) {
+    return {
+      "full_name": fullName,
+      "phone_number": phoneNumber,
+      "email": email,
+      "password": password,
+      "image": image,
+      "governorate_id": governorateId,
+      "verify": verify,
+      "token": accessToken,
+      "token_type": tokenType.name,
+    };
   }
 
   factory UserModel.fromApiJson(Map<String, dynamic> json) {
@@ -61,18 +77,7 @@ class UserModel {
     };
   }
 
-  Map<String, dynamic> toLocaleJson(TokenType tokenType) {
-    return {
-      "full_name": fullName,
-      "phone_number": phoneNumber,
-      "email": email,
-      "password": password,
-      "image": image,
-      "governorate_id": governorateId,
-      "verify": verify,
-      "token": "${tokenType.name}_$accessToken",
-    };
-  }
+
 
   // Map<String, dynamic> getRequestHeaders() {
   //   log("getting query headers: ${accessToken?.split("_").last}");

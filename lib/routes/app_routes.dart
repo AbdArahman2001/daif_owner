@@ -11,6 +11,9 @@ abstract class Routes {
   static const otp = "/otp";
   static const addNewChalet = "/addNewChalet";
   static const addNewBooking = "/addNewBooking";
+  static const updateChalet = "/updateChalet";
+  static const profile = "/profile";
+  static const contactUs = "/contactUs";
 
 }
 

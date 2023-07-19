@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:daif_owner/data/model/response/service_model.dart';
 import 'package:daif_owner/utill/color_manager.dart';
 import 'package:daif_owner/utill/styles_manager.dart';
@@ -12,6 +14,7 @@ class ChooseServicesWidget extends StatelessWidget {
   final void Function(int serviceId) changeServiceStatus;
   @override
   Widget build(BuildContext context) {
+    log("services: $allServices");
     return Column(
       children: allServices
           .map((service) => _SingleServiceWidget(

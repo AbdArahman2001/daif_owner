@@ -1,6 +1,6 @@
 import 'package:daif_owner/routes/app_pages.dart';
 import 'package:daif_owner/view/screens/dashboard/screen/dashboard_screen.dart';
-import 'package:daif_owner/view/screens/my_places/screen/add_new_chalet_screen.dart';
+import 'package:daif_owner/view/screens/my_places/screen/add_or_update_new_chalet_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';

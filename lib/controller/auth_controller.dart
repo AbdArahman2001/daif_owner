@@ -25,7 +25,7 @@ class AuthController extends GetxController {
   void onInit() {
     super.onInit();
     fullNameController.text = "Abedarhman";
-    passwordController.text = "Pas@123";
+    passwordController.text = "12345678";
     emailController.text = "testaccount3@gmail.com";
     phoneNumberController.text = "0591212301";
   }
@@ -35,77 +35,63 @@ class AuthController extends GetxController {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController fullNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
-    TextEditingController otpController  = TextEditingController();
-  String governorateId ="1";
+  TextEditingController otpController = TextEditingController();
+  String governorateId = "1";
   XFile? profileImage;
 
   // LoginMethod loginMethod = LoginMethod.register;
   // late  UserModel userModel;
   bool rememberMe = false;
   bool isTermsAndConditions = false;
-  bool isLoading = false;
 
-  void registerAndSendOtp()async {
+  void registerAndSendOtp() async {
     final result = await _register();
     if (result) {
       final otpResult = await _sendOtp();
-      if(otpResult) {
-        Get.off( const OtpScreen());
+      if (otpResult) {
+        Get.to(() => const OtpScreen());
       }
-
     }
   }
 
   Future<bool> verifyOtp() async {
-    isLoading = true;
-    update();
-    ApiResponse apiResponse = await authRepo.verifyOtp(otpController.text.trim());
-
+    ApiResponse apiResponse =
+        await authRepo.verifyOtp(otpController.text.trim());
     if (apiResponse.response != null &&
         apiResponse.response!.statusCode == 200 &&
         apiResponse.response!.data["error"] == false) {
       CustomSnackBar.instance.showCustomToast(message: "otp verified");
+      userInfo!.verify = true;
       authRepo.saveUserInfo(userInfo!.toLocaleJson(TokenType.login));
-      Get.to(const DashboardScreen());
-      isLoading = false;
+      Get.toNamed(Routes.dashboard);
       return true;
     } else {
-      isLoading = false;
-      update();
       ApiChecker.checkApi(apiResponse);
       return false;
     }
   }
 
-  resendOtp()async{
+  resendOtp() async {
     log("----------- resend otp");
     await _sendOtp();
   }
 
   Future<bool> _sendOtp() async {
-    log("user token: ${userInfo?.accessToken}");
-    isLoading = true;
-    update();
+    // log("user token: ${userInfo?.accessToken}");
     ApiResponse apiResponse = await authRepo.sendOtp();
-    log("sending otp with token: ${userInfo?.accessToken}");
+    // log("sending otp with token: ${userInfo?.accessToken}");
     if (apiResponse.response != null &&
         apiResponse.response!.statusCode == 200 &&
         apiResponse.response!.data["error"] == false) {
       CustomSnackBar.instance.showCustomToast(message: "otp sent");
-      isLoading = false;
       return true;
     } else {
-      isLoading = false;
-      update();
       ApiChecker.checkApi(apiResponse);
       return false;
     }
   }
 
-
   Future<bool> _register() async {
-    isLoading = true;
-    update();
     ApiResponse apiResponse = await authRepo.register(
       UserModel(
           fullName: fullNameController.text.trim(),
@@ -116,7 +102,6 @@ class AuthController extends GetxController {
           governorateId: governorateId,
           verify: null),
     );
-
     if (apiResponse.response != null &&
         apiResponse.response!.statusCode == 200 &&
         apiResponse.response!.data["error"] == false) {
@@ -125,54 +110,56 @@ class AuthController extends GetxController {
       userInfo = UserModel.fromApiJson(data);
       authRepo.saveUserInfo(userInfo!.toLocaleJson(TokenType.register));
       return true;
-      } else {
-        isLoading = false;
-        update();
-        ApiChecker.checkApi(apiResponse);
-        return false;
-      }
+    } else {
+      ApiChecker.checkApi(apiResponse);
+      return false;
     }
+  }
 
+  Future<void> login() async {
+    ApiResponse apiResponse = await authRepo.login(
+      LoginModel(
+          phoneNumber: phoneNumberController.text.trim(),
+          password: passwordController.text.trim()),
+    );
 
-    Future<void> login() async {
-      isLoading = true;
-      update();
-      ApiResponse apiResponse = await authRepo.login(
-        LoginModel(
-            phoneNumber: phoneNumberController.text.trim(),
-            password: passwordController.text.trim()),
-      );
-
-      if (apiResponse.response != null &&
-          apiResponse.response!.statusCode == 200 &&
-          apiResponse.response!.data["error"] == false) {
-        userInfo = UserModel.fromApiJson(apiResponse.response!.data["data"]);
+    if (apiResponse.response != null &&
+        apiResponse.response!.statusCode == 200 &&
+        apiResponse.response!.data["error"] == false) {
+      final tempUserInfo =
+          UserModel.fromApiJson(apiResponse.response!.data["data"]);
+      if (tempUserInfo.verify != null && tempUserInfo.verify!) {
+        userInfo = tempUserInfo;
         authRepo.saveUserInfo(userInfo!.toLocaleJson(TokenType.login));
+        authRepo.dioClient.updateHeaders();
         Get.offNamed(Routes.dashboard);
-        isLoading = false;
       } else {
-        isLoading = false;
-        update();
-        ApiChecker.checkApi(apiResponse);
+        CustomSnackBar.instance.showCustomErrorToast(
+            message: "please verify your phone number before");
+        Get.to(() => const OtpScreen());
       }
+    } else {
+      ApiChecker.checkApi(apiResponse);
     }
+  }
 
-    void pickProfileImage(ImageSource source) async {
-      final ImagePicker imagePicker = ImagePicker();
-      XFile? image = await imagePicker.pickImage(source: source);
-      if (image != null) {
-        profileImage = image;
-        update();
-      }
-    }
-
-    changeTermsAndConditions(bool? value) {
-      isTermsAndConditions = value ?? false;
-      update();
-    }
-
-    changeRememberMe(bool? value) {
-      rememberMe = value ?? false;
+  void pickProfileImage(ImageSource source) async {
+    final ImagePicker imagePicker = ImagePicker();
+    XFile? image = await imagePicker.pickImage(
+        source: source, imageQuality: Helper.getImageQuality(source));
+    if (image != null) {
+      profileImage = image;
       update();
     }
   }
+
+  changeTermsAndConditions(bool? value) {
+    isTermsAndConditions = value ?? false;
+    update();
+  }
+
+  changeRememberMe(bool? value) {
+    rememberMe = value ?? false;
+    update();
+  }
+}

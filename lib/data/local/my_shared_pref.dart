@@ -56,16 +56,6 @@ class MySharedPref {
     return UserModel.fromLocaleJson(jsonDecode(userDataAsString));
   }
 
-
-  TokenType? getTokenType() {
-    final userInfo = getUserInfo();
-    if (userInfo == null || userInfo.accessToken == null) {
-      return null;
-    }
-    final tokenType = userInfo.accessToken!.split("_").first;
-    if(tokenType == TokenType.login.name) return TokenType.login;
-    return TokenType.register;
-  }
   Future<void> clearUserInfo() async => await _sharedPreferences.remove(AppConstants.userInfo);
 
   /// clear all data from shared pref

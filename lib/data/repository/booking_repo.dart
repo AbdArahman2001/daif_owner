@@ -12,6 +12,18 @@ class BookingRepo {
   static final instance = BookingRepo._();
   final DioClient dioClient = DioClient.dioClient;
 
+
+
+  updateBookingInfo(int bookingId,BookingModel bookingModel) async {
+    try {
+      Response response = await dioClient.put(
+          "/owner/booking/$bookingId/update",data:bookingModel.toJson() );
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(e);
+    }
+  }
+
   getBookingInfo(int bookingId) async {
     try {
       Response response = await dioClient.get(

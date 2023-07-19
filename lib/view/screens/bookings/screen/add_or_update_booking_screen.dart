@@ -20,8 +20,13 @@ import '../../../../helper/helper.dart';
 import '../../../../localization/my_localizations.dart';
 import '../../../basewidget/custom_app_bar.dart';
 
-class AddNewBookingScreen extends StatelessWidget {
-  const AddNewBookingScreen({Key? key}) : super(key: key);
+class AddOrUpdateBookingScreen extends StatelessWidget {
+  const AddOrUpdateBookingScreen(
+      {Key? key, required this.isEditMode, this.bookingId, this.chaletName})
+      : super(key: key);
+  final bool isEditMode;
+  final int? bookingId;
+  final String? chaletName;
 
   @override
   Widget build(BuildContext context) {
@@ -46,33 +51,38 @@ class AddNewBookingScreen extends StatelessWidget {
                   height: 20.h,
                 ),
                 Text(
-                  locale.choose_the_chalet,
+                  isEditMode ? locale.chalet_name : locale.choose_the_chalet,
                   style: style_400_16(ColorManager.blackTextColor),
                 ),
                 SizedBox(
                   height: 10.h,
                 ),
-                Container(
-                  width: MediaQuery.of(context).size.width * .4,
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  // alignment: Alignment.centerLeft,
-                  child: DropdownButton<int>(
-                      value: controller.selectedChaletId,
-                      underline: const SizedBox.shrink(),
-                      iconEnabledColor: Theme.of(context).primaryColor,
-                      icon: const Icon(Icons.expand_more),
-                      items: controller.chaletsInfo!
-                          .map((chalet) => DropdownMenuItem<int>(
-                              alignment: Alignment.centerLeft,
-                              value: chalet.id,
-                              child: Text(
-                                chalet.name,
-                                style: style_500_16(
-                                    Theme.of(context).primaryColor),
-                              )))
-                          .toList(),
-                      onChanged: controller.changeSelectedChalet),
-                ),
+                isEditMode
+                    ? Text(
+                        chaletName!,
+                        style: style_500_16(Theme.of(context).primaryColor),
+                      )
+                    : Container(
+                        // width: MediaQuery.of(context).size.width * .4,
+                        padding: EdgeInsets.symmetric(horizontal: 20),
+                        // alignment: Alignment.centerLeft,
+                        child: DropdownButton<int>(
+                            value: controller.selectedChaletId,
+                            underline: const SizedBox.shrink(),
+                            iconEnabledColor: Theme.of(context).primaryColor,
+                            icon: const Icon(Icons.expand_more),
+                            items: controller.chaletsInfo!
+                                .map((chalet) => DropdownMenuItem<int>(
+                                    alignment: Alignment.centerLeft,
+                                    value: chalet.id,
+                                    child: Text(
+                                      chalet.name,
+                                      style: style_500_16(
+                                          Theme.of(context).primaryColor),
+                                    )))
+                                .toList(),
+                            onChanged: controller.changeSelectedChalet),
+                      ),
                 SizedBox(
                   height: 16.h,
                 ),
@@ -83,19 +93,27 @@ class AddNewBookingScreen extends StatelessWidget {
                 SizedBox(
                   height: 10.h,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    controller.bookingDate != null
-                        ? Text(
-                            "${controller.bookingDate?.day}-${controller.bookingDate?.month}-${controller.bookingDate?.year}",
-                            style: style_400_16(Theme.of(context).primaryColor),
-                          )
-                        : const Text("00-00-00"),
-                    TextButton(
-                        onPressed: () => controller.pickdate(context),
-                        child: Text(locale.change_date))
-                  ],
+                InkWell(
+                  onTap: () => controller.pickdate(context),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      controller.bookingDate != null
+                          ? Text(
+                              "${controller.bookingDate?.day}-${controller.bookingDate?.month}-${controller.bookingDate?.year}",
+                              style:
+                                  style_400_16(Theme.of(context).primaryColor),
+                            )
+                          : const Text("00-00-00"),
+                      SizedBox(
+                        width: 70.w,
+                      ),
+                      Icon(
+                        Icons.calendar_month,
+                        color: Theme.of(context).primaryColor,
+                      )
+                    ],
+                  ),
                 ),
                 SizedBox(
                   height: 16.h,
@@ -126,7 +144,7 @@ class AddNewBookingScreen extends StatelessWidget {
                                     Theme.of(context).primaryColor),
                               )))
                           .toList(),
-                      onChanged: controller.changeSelectedPeriod),
+                      onChanged: controller.changeSelectedPeriodWithoutGetDate),
                 ),
                 SizedBox(
                   height: 16.h,
@@ -226,10 +244,15 @@ class AddNewBookingScreen extends StatelessWidget {
                 ),
                 CustomElevatedButton(
                     onPressed: () async {
-                      await controller.createNewBookingWithItsAttachments();
+                      if (isEditMode) {
+                        controller.updateBookingWithItsAttachments(bookingId!);
+                        Get.back<bool>();
+                      } else {
+                        await controller.createNewBookingWithItsAttachments();
+                      }
                       Get.back<bool>();
                     },
-                    child: Text(locale.save)),
+                    child: Text(isEditMode ? locale.update : locale.save)),
                 SizedBox(
                   height: 30.h,
                 ),

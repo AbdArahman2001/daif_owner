@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:daif_owner/data/local/my_shared_pref.dart';
+import 'package:daif_owner/data/repository/auth_repo.dart';
 import 'package:daif_owner/routes/app_pages.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +14,7 @@ import '../view/basewidget/custom_snackbar.dart';
 class ApiChecker {
 
   static void checkApi(ApiResponse apiResponse) {
-    late final String errorMessage;
+    late final String? errorMessage;
     try {
       if (apiResponse.error != null && apiResponse.error is String) {
         errorMessage = apiResponse.error.toString();
@@ -35,20 +36,19 @@ class ApiChecker {
                 errorMessage = "Receive timeout in connection with API server";
                 break;
               case DioErrorType.response:
+                final DioError error = apiResponse.error;
                 switch (apiResponse.error.response!.statusCode) {
                   case 401:
                     errorMessage = "Unauthenticated";
-                    MySharedPref.instance.clearUserInfo();
-                    Get.offNamed(Routes.login);
                     break;
                   case 404:
                   case 500:
                   case 503:
-                    errorMessage = apiResponse.error.response!.statusMessage;
+                    errorMessage = error.message;
                     break;
                   default:
                     errorMessage =
-                    "Failed to load data - status code: ${apiResponse.error.response!.statusCode}";
+                    error.response?.data["msg"];
                     break;
                 }
                 break;
@@ -69,7 +69,11 @@ class ApiChecker {
       errorMessage = e.toString();
     }
     log("---------------------------- Api Checker:\n$errorMessage");
-    CustomSnackBar.instance.showCustomErrorToast(message: errorMessage);
+    if(errorMessage == "Unauthenticated"){
+     AuthRepo authRepo = AuthRepo.instance;
+     authRepo.logout();
+    }
+    CustomSnackBar.instance.showCustomErrorToast(message: errorMessage??"UnKnown");
   }
 
 // called when an exception occurred to navigate to auth_screen or show error snackBar.

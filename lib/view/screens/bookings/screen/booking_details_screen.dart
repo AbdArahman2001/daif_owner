@@ -2,9 +2,11 @@ import 'package:daif_owner/data/model/response/attachment_model.dart';
 import 'package:daif_owner/data/model/response/booking_model.dart';
 import 'package:daif_owner/data/model/response/booking_time_model.dart';
 import 'package:daif_owner/helper/helper.dart';
+import 'package:daif_owner/routes/app_pages.dart';
 import 'package:daif_owner/utill/assets_manager.dart';
 import 'package:daif_owner/view/basewidget/button/custom_back_button.dart';
 import 'package:daif_owner/view/basewidget/custom_cached_network_image.dart';
+import 'package:daif_owner/view/screens/bookings/screen/add_or_update_booking_screen.dart';
 import 'package:daif_owner/view/screens/bookings/widget/booking_id_widget.dart';
 import 'package:daif_owner/view/screens/bookings/widget/booking_time_and_date_widget.dart';
 import 'package:daif_owner/view/screens/bookings/widget/custom_divider_widget.dart';
@@ -26,18 +28,29 @@ class BookingDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final locale = MyLocalizations.translate(context);
-    return Scaffold(
-      appBar: CustomAppBar(
-        title: locale.booking_details,
-        actions: SizedBox.shrink(),
-        leading: IconButton(
-          onPressed: () => Get.back(),
-          icon: const Icon(Icons.arrow_back_ios),
-        ),
-      ),
-      body: GetBuilder<BookingsController>(
-        builder: (controller) {
-          return Container(
+    return GetBuilder<BookingsController>(builder: (controller) {
+      return Scaffold(
+          appBar: CustomAppBar(
+            title: locale.booking_details,
+            actions: IconButton(
+              icon: Icon(Icons.edit),
+              onPressed: () {
+                controller.setFieldsWithData(bookingModel);
+                Get.to(
+                  () => AddOrUpdateBookingScreen(
+                    isEditMode: true,
+                    bookingId: bookingModel.id,
+                    chaletName: bookingModel.chaletName,
+                  ),
+                );
+              },
+            ),
+            leading: IconButton(
+              onPressed: () => Get.back(),
+              icon: const Icon(Icons.arrow_back_ios),
+            ),
+          ),
+          body: Container(
             padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 16.w),
             child: SingleChildScrollView(
               child: Column(
@@ -74,23 +87,10 @@ class BookingDetailsScreen extends StatelessWidget {
                   SizedBox(
                     height: 8.h,
                   ),
-                  Row(
-                    children: [
-                      Text(
-                        locale.finance_info,
-                        style: style_600_18(ColorManager.blackTextColor),
-                        textAlign: TextAlign.start,
-                      ),
-                      const Expanded(
-                        child: SizedBox(),
-                      ),
-                      TextButton(
-                          onPressed: () {},
-                          child: Text(
-                            locale.edit,
-                            style: style_500_17(ColorManager.primaryColor),
-                          ))
-                    ],
+                  Text(
+                    locale.finance_info,
+                    style: style_600_18(ColorManager.blackTextColor),
+                    textAlign: TextAlign.start,
                   ),
                   SingleInformationRow(
                       label: locale.booking_price,
@@ -149,10 +149,13 @@ class BookingDetailsScreen extends StatelessWidget {
                       Flexible(
                           flex: 1,
                           child: TextButton(
-                            onPressed: () => Helper.navigateToCallingBoard(),
+                            onPressed: () => Helper.doLaunchURL(
+                                "tel:${bookingModel.customerPhoneNumber}"),
                             child: Text(
                               bookingModel.customerPhoneNumber,
-                              style: style_600_16(ColorManager.primaryColor).copyWith(decoration: TextDecoration.underline),
+                              style: style_600_16(ColorManager.primaryColor)
+                                  .copyWith(
+                                      decoration: TextDecoration.underline),
                             ),
                           )),
                     ],
@@ -166,7 +169,8 @@ class BookingDetailsScreen extends StatelessWidget {
                     height: 10.h,
                   ),
                   SingleInformationRow(
-                      label: locale.id_number, value: bookingModel.customerIdentity),
+                      label: locale.id_number,
+                      value: bookingModel.customerIdentity),
                   SizedBox(
                     height: 10.h,
                   ),
@@ -186,8 +190,8 @@ class BookingDetailsScreen extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(10.r),
                                     child: CustomCachedNetworkImage(
                                       imageUrl: attachment.path,
-                                      width:
-                                          MediaQuery.of(context).size.width * .8,
+                                      width: MediaQuery.of(context).size.width *
+                                          .8,
                                       height: 200,
                                     )),
                               ))
@@ -200,10 +204,8 @@ class BookingDetailsScreen extends StatelessWidget {
                 ],
               ),
             ),
-          );
-        },
-      ),
-    );
+          ));
+    });
   }
 }
 

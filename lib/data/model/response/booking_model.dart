@@ -56,4 +56,7 @@ class BookingModel {
       'number_of_persons': numberOfPersons,
     };
   }
+
+
+
 }
