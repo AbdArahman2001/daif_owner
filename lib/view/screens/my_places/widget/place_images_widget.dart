@@ -4,8 +4,10 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:daif_owner/view/screens/my_places/widget/single_slider_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 import '../../../../utill/color_manager.dart';
+import '../../../basewidget/full_screen_image.dart';
 import '../../../basewidget/indicator_circle_widget.dart';
 
 class PlaceImagesWidget extends StatefulWidget {
@@ -55,7 +57,7 @@ class _PlaceImagesWidgetState extends State<PlaceImagesWidget> {
             imagePath: image,
             borderRadius: 40.r,
             imageHeight: widget.imageHeight,
-            onTap: widget.onTap,
+            onTap: () =>  Get.to(()=>FullScreenImage(imagePath: image,)),
             imageWidth: widget.imageWidth,
             horizontalMargin: widget.horizontalMargin,
           ))

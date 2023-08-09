@@ -1,4 +1,5 @@
 import 'package:daif_owner/controller/on_boarding_controller.dart';
+import 'package:daif_owner/controller/profile_controller.dart';
 import 'package:daif_owner/localization/my_localizations.dart';
 import 'package:daif_owner/utill/assets_manager.dart';
 import 'package:daif_owner/utill/styles_manager.dart';
@@ -12,6 +13,7 @@ import 'package:get/get.dart';
 
 import '../../../../utill/color_manager.dart';
 import '../../../basewidget/button/custom_back_button.dart';
+import '../../../basewidget/dialog/choose_language_dialog.dart';
 
 class OnBoardingScreen extends StatefulWidget {
   const OnBoardingScreen({Key? key}) : super(key: key);
@@ -27,16 +29,11 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     final locale = MyLocalizations.translate(context);
     final titles = [
       locale.first_on_boarding_title,
-      locale.second_on_boarding_description,
-      locale.third_on_boarding_description,
+      locale.second_on_boarding_title,
+      locale.third_on_boarding_title,
       locale.fourth_on_boarding_title,
     ];
-    final descriptions = [
-      locale.first_on_boarding_description,
-      locale.second_on_boarding_description,
-      locale.third_on_boarding_description,
-      locale.fourth_on_boarding_description,
-    ];
+
     final images = [
       ImageAssets.onBoardingImg1,
       ImageAssets.onBoardingImg2,
@@ -49,6 +46,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
           appBar: const EmptyAppBar(),
           body: Stack(
             alignment: Alignment.bottomCenter,
+
             children: [
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -58,18 +56,24 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        CustomBackButton(
-                          onPressed: controller.goPreviousPage,
+                        Row(
+                          children: [
+                            CustomBackButton(
+                              onPressed: controller.goPreviousPage,
+                            ),
+                            IconButton(onPressed: (){
+                              final controller = Get.find<ProfileController>();
+                              final dialog = ChooseLanguageDialog(
+                                  languageGroup: controller.languageGroup,
+                                  changeLanguage: controller.changeLanguage);
+                              showDialog(
+                                  context: context, builder: (context) => dialog);
+                            }, icon: Icon(Icons.language))
+                          ],
                         ),
-                        ElevatedButton(
+                        TextButton(
                           onPressed:
                             controller.skip,
-                          style: ElevatedButton.styleFrom(
-                              padding: EdgeInsets.zero,
-                              backgroundColor: ColorManager.grey1,
-                              fixedSize: Size(90.w, 37.h),
-                              shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(19.r))),
                           child: Text(locale.skip),
                         )
                       ],
@@ -82,7 +86,6 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                       children: images
                           .map((image) => SingleOnBoardingView(
                           title: titles[images.indexOf(image)],
-                          description: descriptions[images.indexOf(image)],
                           imgUrl: image))
                           .toList(),
                     ),
@@ -97,15 +100,11 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
                   },
                   style: ElevatedButton.styleFrom(fixedSize: Size(220.w, 60.h)),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      const Expanded(child: SizedBox()),
                       Text(
                         controller.index == titles.length - 1 ? locale.login : locale.next,
                         style: style_500_16(ColorManager.whiteColor),
-                      ),
-                      SizedBox(
-                        width: 60.w,
                       ),
                       SizedBox(
                         width: 42.w,

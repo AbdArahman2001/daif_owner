@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../helper/enum_data.dart';
+import '../../../../utill/color_manager.dart';
 import '../../../../utill/styles_manager.dart';
 
 class YearSelectorWidget extends StatelessWidget {
@@ -18,15 +19,13 @@ class YearSelectorWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(8.r),
           color: Theme
               .of(context)
-              .accentColor),
+              .focusColor),
       child: DropdownButton<int>(
           value: controller.selectedYear,
           underline: SizedBox.shrink(),
           iconEnabledColor: Colors.white,
-          dropdownColor: Theme
-              .of(context)
-              .accentColor,
-          icon: const Icon(Icons.expand_more),
+          dropdownColor: Colors.white,
+          icon: const Icon(Icons.expand_more,color: ColorManager.complementaryColor,),
           items: controller.availableYears
               .map((year) =>
               DropdownMenuItem<int>(
@@ -34,7 +33,9 @@ class YearSelectorWidget extends StatelessWidget {
                   value: year,
                   child: Text(
                     year.toString(),
-                    style: style_500_12(Colors.white),
+                    style: style_500_12(controller.selectedYear == year
+                        ? ColorManager.complementaryColor
+                        : ColorManager.blackTextColor),
                   )))
               .toList(),
           onChanged: controller.selectYear),

@@ -1,18 +1,25 @@
+import 'dart:developer';
+
 import 'package:daif_owner/controller/calendar_controller.dart';
 import 'package:daif_owner/controller/my_places_controller.dart';
 import 'package:daif_owner/data/model/response/booking_time_model.dart';
 import 'package:daif_owner/data/model/response/chalet_model.dart';
 import 'package:daif_owner/data/repository/booking_repo.dart';
 import 'package:daif_owner/helper/helper.dart';
+import 'package:daif_owner/localization/my_localizations.dart';
+import 'package:daif_owner/utill/app_constants.dart';
+import 'package:daif_owner/view/basewidget/custom_snackbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import '../data/model/response/attachment_model.dart';
 import '../data/model/response/base/api_response.dart';
 import '../data/model/response/booking_model.dart';
 import '../helper/api_checker.dart';
+import '../view/screens/calendar/widget/calendar_booking_short_info_widget.dart';
 
 class BookingsController extends GetxController {
   BookingsController() {
@@ -23,9 +30,20 @@ class BookingsController extends GetxController {
     paidAmountController = TextEditingController();
     numberOfPersonsControllers = TextEditingController();
   }
+
+  // final PagingController<int, BookingModel> pagingController =
+  //     PagingController(firstPageKey: 1);
+  final bookingFormKey = GlobalKey<FormState>(debugLabel: "booking_form_key");
+  final status0refreshIndicatorKey =
+      GlobalKey<RefreshIndicatorState>(debugLabel: "state_0");
+  final status1refreshIndicatorKey =
+      GlobalKey<RefreshIndicatorState>(debugLabel: "state_1");
+  final status2refreshIndicatorKey =
+      GlobalKey<RefreshIndicatorState>(debugLabel: "state_2");
+  Map<int, List<BookingModel>?> cachedBookings = {};
   bool isDataEdited = false;
   final BookingRepo bookingsRepo = BookingRepo.instance;
-  final pageViewController = PageController();
+  final pageViewController = PageController(initialPage: 0);
   late final TextEditingController customerNameController;
   late final TextEditingController phoneNumberController;
   late final TextEditingController customerIdentity;
@@ -36,8 +54,7 @@ class BookingsController extends GetxController {
   int selectedTabIndex = 0;
   int? selectedChaletId;
 
-  bool isLoading = false;
-  List<BookingModel> allBookings = [];
+  List<BookingModel>? allBookings = [];
   List<AttachmentModel> currentBookingAttachments =
       []; // the attachments that fetched form server
   List<XFile> chosenBookingAttachments =
@@ -53,21 +70,35 @@ class BookingsController extends GetxController {
         .then((value) => getAllBookings(0));
   }
 
-  raiseEditingFlag(String? input){
+  raiseEditingFlag(String? input) {
     isDataEdited = true;
+  }
+
+  List<BookingModel>? getCachedBookings(int status) {
+    final List<BookingModel>? result = cachedBookings[status];
+    return result;
+  }
+
+  setCachedBookings(int status, List<BookingModel> bookings) {
+    cachedBookings[status] = bookings;
+  }
+
+  refreshBookings({int? status}){
+   cachedBookings[status??selectedTabIndex] = null;
+    getAllBookings(status??selectedTabIndex);
   }
 
   setFieldsWithData(BookingModel bookingModel) async {
     isDataEdited = false;
     // text fields
-    customerNameController.text = bookingModel.customerName ;
-    phoneNumberController.text = bookingModel.customerPhoneNumber ;
-    customerIdentity.text = bookingModel.customerIdentity ;
-    bookingPriceController.text = bookingModel.bookingPrice.toString() ;
-    paidAmountController.text = bookingModel.paidAmount.toString() ;
-    numberOfPersonsControllers.text = bookingModel.numberOfPersons.toString() ;
+    customerNameController.text = bookingModel.customerName;
+    phoneNumberController.text = bookingModel.customerPhoneNumber;
+    customerIdentity.text = bookingModel.customerIdentity;
+    bookingPriceController.text = bookingModel.bookingPrice.toString();
+    paidAmountController.text = bookingModel.paidAmount.toString();
+    numberOfPersonsControllers.text = bookingModel.numberOfPersons.toString();
 
-    bookingDate =bookingModel.bookingDate.toDateTime() ;
+    bookingDate = bookingModel.bookingDate.toDateTime();
     selectedBookingPeriod = bookingModel.bookingPeriod;
     // images clearing
     chosenBookingAttachments = [];
@@ -83,10 +114,62 @@ class BookingsController extends GetxController {
     update();
   }
 
-  updateBookingWithItsAttachments(int bookingId) async {
+  updateBookingWithItsAttachments(int bookingId, BuildContext context) async {
+    if (!(bookingFormKey.currentState!.validate())) return;
+    if (bookingDate == null) {
+      final locale = MyLocalizations.translate(context);
+      CustomSnackBar.instance
+          .showCustomErrorToast(message: locale.enter_booking_date);
+      return;
+    }
     final result = await _updateBookingInfo(bookingId);
     if (result) {
       _addBookingAttachments(bookingId);
+    }
+    clearData();
+    Get.back<bool>();
+    Get.back<bool>();
+  }
+
+  Future<bool> cancelBooking(int bookingId)async{
+    ApiResponse apiResponse = await bookingsRepo.cancelBooking(
+      bookingId,
+    );
+    if (apiResponse.response != null &&
+        apiResponse.response!.statusCode == 200 &&
+        apiResponse.response!.data["error"] == false) {
+      refreshBookings(status: 0);
+      cachedBookings[2] = null;// clear the canceled from cache
+      return true;
+    } else {
+      ApiChecker.checkApi(apiResponse);
+      return false;
+    }
+  }
+
+  Future<bool> completeBookingPayment(int bookingId, BookingModel bookingModel)async{
+    ApiResponse apiResponse = await bookingsRepo.updateBookingInfo(
+      bookingId,
+      BookingModel(
+          id: bookingId,
+          customerName: bookingModel.customerName,
+          customerPhoneNumber: bookingModel.customerPhoneNumber,
+          customerIdentity:bookingModel.customerIdentity,
+          paidAmount: bookingModel.bookingPrice,
+          bookingPrice: bookingModel.bookingPrice,
+          bookingDate: bookingModel.bookingDate,
+          bookingPeriod:bookingModel.bookingPeriod,
+          numberOfPersons: bookingModel.numberOfPersons,
+          chaletName: "",
+          status: "0"),
+    );
+    if (apiResponse.response != null &&
+        apiResponse.response!.statusCode == 200 &&
+        apiResponse.response!.data["error"] == false) {
+      return true;
+    } else {
+      ApiChecker.checkApi(apiResponse);
+      return false;
     }
   }
 
@@ -122,23 +205,37 @@ class BookingsController extends GetxController {
   }
 
   void changeSelectedStatus(int index) {
+    log(index.toString());
+    if (index > 2) return;
     selectedTabIndex = index;
     getAllBookings(index);
+
   }
 
   Future<bool> getChaletIdWithName() async {
     final controller = Get.find<MyPlacesController>();
     final List<ChaletShortInfo>? result = await controller.getAllChalets();
-    if (result == null) return false;
+    if (result == null || result.isEmpty) return false;
     chaletsInfo = result;
+    selectedChaletId = result.first.id;
     return true;
   }
 
-  createNewBookingWithItsAttachments() async {
+  createNewBookingWithItsAttachments(BuildContext context) async {
+    if (!(bookingFormKey.currentState!.validate())) return;
+    if (bookingDate == null) {
+      final locale = MyLocalizations.translate(context);
+      CustomSnackBar.instance
+          .showCustomErrorToast(message: locale.enter_booking_date);
+      return;
+    }
     final bookingId = await _createNewBooking();
     if (bookingId != null) {
-      _addBookingAttachments(bookingId);
+      await _addBookingAttachments(bookingId);
+      refreshBookings();
     }
+    clearData();
+    Get.back<bool>();
   }
 
   Future<int?> _createNewBooking() async {
@@ -182,7 +279,6 @@ class BookingsController extends GetxController {
 
   getBookingAttachments(int bookingId) async {
     currentBookingAttachments = [];
-    isLoading = true;
     update();
     ApiResponse apiResponse =
         await bookingsRepo.getBookingAttachments(bookingId);
@@ -195,25 +291,33 @@ class BookingsController extends GetxController {
     } else {
       ApiChecker.checkApi(apiResponse);
     }
-    isLoading = false;
     update();
   }
 
   getAllBookings(int status) async {
-    allBookings = [];
-    isLoading = true;
-    ApiResponse apiResponse = await bookingsRepo.getAllBookings(status);
+    final result = getCachedBookings(status);
+    if (result != null) {
+      allBookings = result;
+      update();
+      return;
+    }
+    allBookings = null;
+    ApiResponse apiResponse = await bookingsRepo.getAllBookings(status: status);
     if (apiResponse.response != null &&
         apiResponse.response!.statusCode == 200 &&
         apiResponse.response!.data["error"] == false) {
       allBookings = (apiResponse.response!.data["data"] as List)
           .map((booking) => BookingModel.fromJson(booking))
           .toList();
+      update();
+      if (allBookings != null) {
+        setCachedBookings(status, allBookings!);
+      }
+
     } else {
       ApiChecker.checkApi(apiResponse);
     }
-    isLoading = false;
-    update();
+    return;
   }
 
   void removeImage(int index) {
@@ -265,13 +369,12 @@ class BookingsController extends GetxController {
   changeSelectedPeriod(BookingPeriod? period) {
     final calendarController = Get.find<CalendarController>();
     if (period != null) {
-
       selectedBookingPeriod = period;
       calendarController.getCalendarBookings();
     }
   }
 
-  changeSelectedPeriodWithoutGetDate(BookingPeriod? period){
+  changeSelectedPeriodWithoutGetDate(BookingPeriod? period) {
     if (period != null) {
       raiseEditingFlag(null);
       selectedBookingPeriod = period;
@@ -281,5 +384,17 @@ class BookingsController extends GetxController {
 
   setBookingDate(BookingDateModel bookingDateModel) {
     bookingDate = bookingDateModel.toDateTime();
+  }
+
+  clearData() {
+    chosenBookingAttachments.clear();
+    customerNameController.clear();
+    phoneNumberController.clear();
+    customerIdentity.clear();
+    bookingPriceController.clear();
+    paidAmountController.clear();
+    numberOfPersonsControllers.clear();
+    bookingDate = null;
+    isDataEdited = false;
   }
 }

@@ -33,23 +33,25 @@ class Helper {
         return Governorate.gaza;
     }
   }
-  static getDayNameFromDate(DateTime firstDate, int dayIndex) {
+
+  static getDayNameFromDate(DateTime firstDate, int dayIndex,BuildContext context) {
+    final locale = MyLocalizations.translate(context);
     final int day = ((firstDate.weekday + dayIndex - 1) % 7);
     switch (day) {
       case 1:
-        return "Monday";
+        return locale.monday;
       case 2:
-        return "Tuesday";
+        return locale.tuesday;
       case 3:
-        return "Wednesday";
+        return locale.wednesday;
       case 4:
-        return "Thursday";
+        return locale.thursday;
       case 5:
-        return "Friday";
+        return locale.friday;
       case 6:
-        return "Saturday";
+        return locale.saturday;
       case 0:
-        return "Sunday";
+        return locale.sunday;
       default:
         return "UnKnown";
     }
@@ -67,7 +69,7 @@ class Helper {
   static openImageSourceDialog(BuildContext context, Function pickImg) async {
     final locale = MyLocalizations.translate(context);
     final AlertDialog dialog = AlertDialog(
-      title: Text(locale.attack_image),
+      title: Text(locale.attach_image),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

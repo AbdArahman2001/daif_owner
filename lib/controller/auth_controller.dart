@@ -2,14 +2,18 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:daif_owner/data/local/my_shared_pref.dart';
+import 'package:daif_owner/data/model/response/remembered_user.dart';
 import 'package:daif_owner/data/model/response/user_model.dart';
 import 'package:daif_owner/helper/helper.dart';
+import 'package:daif_owner/localization/my_localizations.dart';
 import 'package:daif_owner/view/basewidget/custom_snackbar.dart';
 import 'package:daif_owner/view/screens/auth/screen/otp_screen.dart';
 import 'package:daif_owner/view/screens/dashboard/screen/dashboard_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../data/model/response/base/api_response.dart';
 import '../data/model/response/login_model.dart';
@@ -17,6 +21,7 @@ import '../data/repository/auth_repo.dart';
 import '../helper/api_checker.dart';
 import '../main.dart';
 import '../routes/app_pages.dart';
+import 'dashboard_controller.dart';
 
 enum LoginMethod { login, register }
 
@@ -24,18 +29,18 @@ class AuthController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    fullNameController.text = "Abedarhman";
-    passwordController.text = "12345678";
-    emailController.text = "testaccount3@gmail.com";
-    phoneNumberController.text = "0591212301";
+    log("----------- on init called");
+    getRememberedUser();
   }
 
+  final registerFormKey = GlobalKey<FormState>(debugLabel: "register_key");
+  final loginFormKey = GlobalKey<FormState>(debugLabel: "login_key");
   final AuthRepo authRepo = AuthRepo.instance;
-  final TextEditingController phoneNumberController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  final TextEditingController fullNameController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
-  TextEditingController otpController = TextEditingController();
+  final phoneNumberController = TextEditingController();
+  final passwordController = TextEditingController();
+  final fullNameController = TextEditingController();
+  final emailController = TextEditingController();
+  final otpController = TextEditingController();
   String governorateId = "1";
   XFile? profileImage;
 
@@ -44,12 +49,37 @@ class AuthController extends GetxController {
   bool rememberMe = false;
   bool isTermsAndConditions = false;
 
-  void registerAndSendOtp() async {
+  @override
+  void dispose() {
+    super.dispose();
+    clearData();
+  }
+
+  getRememberedUser() {
+
+    final RememberedUser? user = MySharedPref.instance.getRememberedUser();
+    log("setting user phone number and password: ${user?.phoneNumber??""} ${user?.password??""}");
+    if (user !=null) {
+      phoneNumberController.text = user.phoneNumber ?? "";
+      passwordController.text = user.password ?? "";
+    }
+  }
+
+  void registerAndSendOtp(BuildContext context) async {
+    if (!(registerFormKey.currentState!.validate())) return;
+    if (profileImage == null) {
+      final locale = MyLocalizations.translate(context);
+      CustomSnackBar.instance
+          .showCustomErrorToast(message: locale.upload_your_profile_image);
+      return;
+    }
+
     final result = await _register();
     if (result) {
       final otpResult = await _sendOtp();
       if (otpResult) {
-        Get.to(() => const OtpScreen());
+        clearData();
+        Get.off(Routes.otp);
       }
     }
   }
@@ -63,7 +93,7 @@ class AuthController extends GetxController {
       CustomSnackBar.instance.showCustomToast(message: "otp verified");
       userInfo!.verify = true;
       authRepo.saveUserInfo(userInfo!.toLocaleJson(TokenType.login));
-      Get.toNamed(Routes.dashboard);
+      Get.offNamed(Routes.dashboard);
       return true;
     } else {
       ApiChecker.checkApi(apiResponse);
@@ -109,6 +139,7 @@ class AuthController extends GetxController {
           jsonEncode(apiResponse.response!.data["data"]).toString()));
       userInfo = UserModel.fromApiJson(data);
       authRepo.saveUserInfo(userInfo!.toLocaleJson(TokenType.register));
+      registerFormKey.currentState!.dispose();
       return true;
     } else {
       ApiChecker.checkApi(apiResponse);
@@ -117,6 +148,7 @@ class AuthController extends GetxController {
   }
 
   Future<void> login() async {
+    if (!(loginFormKey.currentState!.validate())) return;
     ApiResponse apiResponse = await authRepo.login(
       LoginModel(
           phoneNumber: phoneNumberController.text.trim(),
@@ -128,15 +160,24 @@ class AuthController extends GetxController {
         apiResponse.response!.data["error"] == false) {
       final tempUserInfo =
           UserModel.fromApiJson(apiResponse.response!.data["data"]);
+      userInfo = tempUserInfo;
+      authRepo.dioClient.updateHeaders();
       if (tempUserInfo.verify != null && tempUserInfo.verify!) {
-        userInfo = tempUserInfo;
         authRepo.saveUserInfo(userInfo!.toLocaleJson(TokenType.login));
-        authRepo.dioClient.updateHeaders();
-        Get.offNamed(Routes.dashboard);
+        if (rememberMe) {
+          authRepo.rememberUser(RememberedUser(
+              phoneNumber: phoneNumberController.text,
+              password: passwordController.text));
+        }
+        Get.lazyPut(() => DashBoardController());
+        Get.off(()=>const DashboardScreen());
+        clearData();
       } else {
         CustomSnackBar.instance.showCustomErrorToast(
             message: "please verify your phone number before");
-        Get.to(() => const OtpScreen());
+        _sendOtp();
+        Get.toNamed(Routes.otp);
+        clearData();
       }
     } else {
       ApiChecker.checkApi(apiResponse);
@@ -161,5 +202,15 @@ class AuthController extends GetxController {
   changeRememberMe(bool? value) {
     rememberMe = value ?? false;
     update();
+  }
+
+  clearData() {
+    log("------------------------ Data cleared");
+    profileImage = null;
+    phoneNumberController.clear();
+    passwordController.clear();
+    fullNameController.clear();
+    emailController.clear();
+    otpController.clear();
   }
 }

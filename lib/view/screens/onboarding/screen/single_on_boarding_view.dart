@@ -9,11 +9,9 @@ class SingleOnBoardingView extends StatefulWidget {
   const SingleOnBoardingView(
       {Key? key,
       required this.title,
-      required this.description,
       required this.imgUrl})
       : super(key: key);
   final String title;
-  final String description;
   final String imgUrl;
 
   @override
@@ -41,13 +39,6 @@ class _SingleOnBoardingViewState extends State<SingleOnBoardingView> {
           SizedBox(
             height: 22.h,
           ),
-          Container(
-            margin: EdgeInsets.symmetric(horizontal: 12.w),
-            child: Text(
-              widget.description,
-              style: style_400_14(ColorManager.blackTextColor),
-            ),
-          ),
           const Expanded(child: SizedBox()),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 10.w),
@@ -56,7 +47,7 @@ class _SingleOnBoardingViewState extends State<SingleOnBoardingView> {
                   topRight: Radius.circular(40.r),
                   topLeft: Radius.circular(40.r)),
               child: Container(
-                height: 500.h,
+                height: 550.h,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.only(
                           topRight: Radius.circular(40.r),

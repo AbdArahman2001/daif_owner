@@ -11,7 +11,7 @@ import '../../../../routes/app_pages.dart';
 
 class SignUpPartWidget extends StatelessWidget {
   const SignUpPartWidget(
-      {Key? key, required this.isTermsAndConditions, required this.changeTermsAndConditions, required this.signUpFunc, })
+      {Key? key, required this.isTermsAndConditions, required this.changeTermsAndConditions, required this.signUpFunc })
       : super(key: key);
   final bool isTermsAndConditions;
   final ValueChanged<bool?> changeTermsAndConditions;
@@ -52,9 +52,10 @@ class SignUpPartWidget extends StatelessWidget {
                 .of(context)
                 .textTheme
                 .headlineMedium,),
+            SizedBox(width: 6.w,),
             TextButton(
               style: TextButton.styleFrom(padding: EdgeInsets.zero),
-                onPressed:  ()=>Get.to(const LoginScreen()), child: Text(locale.login,))
+                onPressed:  ()=>Get.off(()=>const LoginScreen()), child: Text(locale.login,))
           ],
         )
       ],

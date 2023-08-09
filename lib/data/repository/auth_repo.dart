@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:daif_owner/data/model/response/remembered_user.dart';
 import 'package:daif_owner/view/screens/auth/screen/login_screen.dart';
 import 'package:dio/dio.dart';
 import 'package:get/get.dart' hide Response, FormData,MultipartFile;
@@ -89,7 +90,7 @@ class AuthRepo {
       return ApiResponse.withError(e);
     }finally{
       MySharedPref.instance.clearUserInfo();
-      Get.off(LoginScreen());
+      Get.off(()=>const LoginScreen());
     }
   }
 
@@ -100,6 +101,10 @@ class AuthRepo {
     } catch (e) {
       rethrow;
     }
+  }
+
+  rememberUser(RememberedUser user){
+    sharedPreferences.rememberUser(user);
   }
 
   UserModel? getUserInfo() {

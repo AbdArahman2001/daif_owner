@@ -43,7 +43,7 @@ class MonthDaysGridWidget extends StatelessWidget {
                     year: dateTime.year,
                     month: dateTime.month,
                     day: index + 1),
-                dayName: Helper.getDayNameFromDate(dateTime, index + 1));
+                dayName: Helper.getDayNameFromDate(dateTime, index + 1,context));
           }),
     );
   }

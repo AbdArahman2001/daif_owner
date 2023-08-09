@@ -36,12 +36,13 @@ final controller = Get.find<MyPlacesController>();
                 fit: BoxFit.cover,
               ),
             ),
+            const Expanded(child: SizedBox()),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
                   child: Text(
-                    chaletShortInfo.name,
+                    "    ${chaletShortInfo.name}",
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                     style: Theme.of(context).textTheme.titleSmall,
@@ -49,6 +50,7 @@ final controller = Get.find<MyPlacesController>();
                 ),
               ],
             ),
+            SizedBox(height: 8.h,),
             Row(
               children: [
                 Icon(
@@ -67,6 +69,7 @@ final controller = Get.find<MyPlacesController>();
                 ),
               ],
             ),
+            SizedBox(height: 8.h,),
           ],
         ),
       ),

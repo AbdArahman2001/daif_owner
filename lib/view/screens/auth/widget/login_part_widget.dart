@@ -77,7 +77,10 @@ class LoginPartWidget extends StatelessWidget {
               style: Theme.of(context).textTheme.headlineMedium,
             ),
             TextButton(
-                onPressed: ()=>Get.off(RegisterScreen()),
+                onPressed: () {
+
+                  Get.off(()=>  const RegisterScreen());
+                },
                 child: Text(
                   locale.sign_up,
                 ))

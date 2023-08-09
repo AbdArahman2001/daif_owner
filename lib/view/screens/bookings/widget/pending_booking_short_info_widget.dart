@@ -1,5 +1,6 @@
 import 'package:daif_owner/data/model/response/booking_model.dart';
 import 'package:daif_owner/localization/my_localizations.dart';
+import 'package:daif_owner/utill/app_constants.dart';
 import 'package:daif_owner/utill/color_manager.dart';
 import 'package:daif_owner/utill/styles_manager.dart';
 import 'package:daif_owner/view/basewidget/custom_cached_network_image.dart';
@@ -22,65 +23,68 @@ class PendingBookingShortInfoWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final locale = MyLocalizations.translate(context);
-    return InkWell(
-      onTap: () {
-        controller.getBookingAttachments( bookingModel.id);
-        Get.to(() =>  BookingDetailsScreen(bookingModel: bookingModel,));
+    return Padding(
+      padding:  EdgeInsets.symmetric(horizontal: 6.w),
+      child: InkWell(
+        onTap: () {
+          controller.getBookingAttachments( bookingModel.id);
+          Get.to(() =>  BookingDetailsScreen(bookingModel: bookingModel,));
 
-      },
-      child: Container(
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16.r),
-            color: Theme.of(context).dialogBackgroundColor),
-        padding: EdgeInsets.symmetric(vertical: 18.h, horizontal: 16.w),
-        margin: EdgeInsets.symmetric(vertical: 12.h),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            BookingIDWidget(id: bookingModel.id),
-            SizedBox(
-              height: 2.h,
-            ),
-            Text(
-              bookingModel.chaletName,
-              style: style_500_12(ColorManager.unSelectedTextColor),
-            ),
-            SizedBox(
-              height: 8.h,
-            ),
-            const Divider(),
-            SizedBox(
-              height: 8.h,
-            ),
-            PlaceImgAndNameWidget(
-                placeName: bookingModel.customerName,
-                bookingPrice: bookingModel.bookingPrice, paidAmount: bookingModel.paidAmount,),
-            SizedBox(
-              height: 8.h,
-            ),
-            Divider(),
-            SizedBox(
-              height: 8.h,
-            ),
-            Row(
-              children: [
-                const Icon(Icons.calendar_month),
-                SizedBox(
-                  width: 12.w,
-                ),
-                BookingTimeAndDateWidget(bookingDate: bookingModel.bookingDate.toStringInfo(),),
-                const Expanded(child: SizedBox()),
-                Text(
-                  "${locale.total} :  ",
-                  style: style_500_14(ColorManager.blackTextColor),
-                ),
-                Text(
-                  "${bookingModel.bookingPrice}\$",
-                  style: style_600_14(ColorManager.complementaryColor),
-                )
-              ],
-            )
-          ],
+        },
+        child: Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16.r),
+              color: Theme.of(context).dialogBackgroundColor),
+          padding: EdgeInsets.symmetric(vertical: 18.h, horizontal: 16.w),
+          margin: EdgeInsets.symmetric(vertical: 12.h),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              BookingIDWidget(id: bookingModel.id),
+              SizedBox(
+                height: 2.h,
+              ),
+              Text(
+                bookingModel.chaletName,
+                style: style_500_12(ColorManager.unSelectedTextColor),
+              ),
+              SizedBox(
+                height: 8.h,
+              ),
+              const Divider(),
+              SizedBox(
+                height: 8.h,
+              ),
+              PlaceImgAndNameWidget(
+                  placeName: bookingModel.customerName,
+                  bookingPrice: bookingModel.bookingPrice, paidAmount: bookingModel.paidAmount,),
+              SizedBox(
+                height: 8.h,
+              ),
+              Divider(),
+              SizedBox(
+                height: 8.h,
+              ),
+              Row(
+                children: [
+                  const Icon(Icons.calendar_month),
+                  SizedBox(
+                    width: 12.w,
+                  ),
+                  BookingTimeAndDateWidget(bookingDate: bookingModel.bookingDate.toStringInfo(),),
+                  const Expanded(child: SizedBox()),
+                  Text(
+                    "${locale.total} :  ",
+                    style: style_500_14(ColorManager.blackTextColor),
+                  ),
+                  Text(
+                    "${bookingModel.bookingPrice} ${AppConstants.currency}",
+                    style: style_600_14(ColorManager.complementaryColor),
+                  )
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );

@@ -6,6 +6,8 @@ import 'package:daif_owner/data/model/response/pool_dimensions_model.dart';
 import 'package:daif_owner/data/model/response/price_model.dart';
 import 'package:daif_owner/data/model/response/service_model.dart';
 import 'package:daif_owner/helper/helper.dart';
+import 'package:daif_owner/localization/my_localizations.dart';
+import 'package:daif_owner/view/basewidget/custom_snackbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -19,7 +21,7 @@ class MyPlacesController extends GetxController {
   MyPlacesController() {
     // getAllChalets();
   }
-
+final chaletFormKey = GlobalKey<FormState>(debugLabel: "chalet_form_key");
   final MyPlacesRepo myPlacesRepo = MyPlacesRepo.instance;
   final TextEditingController placeNameController = TextEditingController();
   final TextEditingController addressController = TextEditingController();
@@ -41,9 +43,15 @@ class MyPlacesController extends GetxController {
   List<ChaletShortInfo>? myChalets;
   ChaletModel? currentChalet;
   List<AttachmentModel>? currentChaletAttachments;
-  bool isLoading = false;
   List<int> selectedServicesIds = [];
   List<ServiceModel> allAvailableServices = [];
+
+  @override
+  void dispose() {
+    super.dispose();
+    clearData();
+  }
+
 
   raiseEditingFlag(String? input){
     isDataEdited = true;
@@ -134,15 +142,23 @@ class MyPlacesController extends GetxController {
     return result;
   }
 
-  updateChaletAndAttachments() async {
+  updateChaletAndAttachments(BuildContext context) async {
+    if(!(chaletFormKey.currentState!.validate())) return;
+    if(licenceImage == null) {
+      final locale = MyLocalizations.translate(context);
+      CustomSnackBar.instance.showCustomErrorToast(message: locale.attach_place_licence);
+      return;
+    }
     final chaletId = await _updateChalet();
     if (chaletId != null) {
       _addChaletAttachment(chaletId);
       Get.back();
       Get.back();
-      getAllChalets();
-      currentChalet = null;
     }
+    myChalets = null;
+    currentChalet = null;
+    clearData();
+    getAllChalets();
   }
 
   Future<int?> _updateChalet() async {
@@ -179,9 +195,8 @@ class MyPlacesController extends GetxController {
   }
 
   Future<void> getAllAvailableServices() async {
-    allAvailableServices = [];
-    isLoading = true;
-    update();
+    if(allAvailableServices.isNotEmpty) return;
+    //allAvailableServices = [];
     ApiResponse apiResponse = await myPlacesRepo.getAllAvailableServices();
     if (apiResponse.response != null &&
         apiResponse.response!.statusCode == 200 &&
@@ -193,7 +208,6 @@ class MyPlacesController extends GetxController {
     } else {
       ApiChecker.checkApi(apiResponse);
     }
-    isLoading = false;
     update();
   }
 
@@ -213,10 +227,8 @@ class MyPlacesController extends GetxController {
 
   getChaletInfoAndAttachments(int chaletId) async {
     if (currentChalet != null && currentChalet!.id == chaletId) return;
-    isLoading = true;
     await _getChalet(chaletId);
     await _getChaletAttachments(chaletId);
-    isLoading = false;
     update();
   }
 
@@ -232,13 +244,22 @@ class MyPlacesController extends GetxController {
     }
   }
 
-  createChaletWithAttachments() async {
+  createChaletWithAttachments(BuildContext context) async {
+    if(!(chaletFormKey.currentState!.validate())) return;
+    if(licenceImage == null) {
+      final locale = MyLocalizations.translate(context);
+      CustomSnackBar.instance.showCustomErrorToast(message: locale.attach_place_licence);
+      return;
+    }
     final chaletId = await _createChalet();
     if (chaletId != null) {
       _addChaletAttachment(chaletId);
       Get.back();
-      getAllChalets();
     }
+    myChalets = null;
+    currentChalet = null;
+    clearData();
+    getAllChalets();
   }
 
   Future<void> _addChaletAttachment(int chaletId) async {
@@ -286,9 +307,7 @@ class MyPlacesController extends GetxController {
   }
 
   Future<List<ChaletShortInfo>?> getAllChalets() async {
-    myChalets = null;
-    isLoading = true;
-    update();
+    if(myChalets != null && myChalets!.isNotEmpty) return myChalets;
     ApiResponse apiResponse = await myPlacesRepo.getAllChalets();
     if (apiResponse.response != null &&
         apiResponse.response!.statusCode == 200 &&
@@ -296,11 +315,9 @@ class MyPlacesController extends GetxController {
       myChalets = (apiResponse.response!.data["data"] as List)
           .map((chaletInfo) => ChaletShortInfo.fromMap(chaletInfo))
           .toList();
-      isLoading = false;
       update();
       return myChalets;
     } else {
-      isLoading = false;
       update();
       ApiChecker.checkApi(apiResponse);
       return null;
@@ -382,4 +399,25 @@ class MyPlacesController extends GetxController {
     ImageAssets.chaletsCategory,
     //ImageAssets.officesCategory,
   ];
+
+  clearData(){
+    licenceImage = null;
+    pickedImages.clear();
+    selectedServicesIds.clear();
+
+    placeNameController.clear();
+    addressController.clear();
+    eveningPriceController.clear();
+    morningPriceController.clear();
+    descriptionController.clear();
+    pollLengthController.clear();
+    pollWidthController.clear();
+    pollMinDepthController.clear();
+    pollMaxDepthController.clear();
+    videoLinkController.clear();
+    isDataEdited = false;
+
+  }
+
+
 }

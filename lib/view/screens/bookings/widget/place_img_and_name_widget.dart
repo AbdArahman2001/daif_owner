@@ -1,3 +1,4 @@
+import 'package:daif_owner/localization/my_localizations.dart';
 import 'package:daif_owner/utill/app_constants.dart';
 import 'package:daif_owner/utill/color_manager.dart';
 import 'package:daif_owner/utill/styles_manager.dart';
@@ -17,6 +18,7 @@ class PlaceImgAndNameWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final locale = MyLocalizations.translate(context);
     return Row(
       children: [
         Column(
@@ -25,16 +27,28 @@ class PlaceImgAndNameWidget extends StatelessWidget {
           children: [
             Text(
               placeName,
-              style: style_500_14(ColorManager.blackTextColor.withOpacity(0.8)),
+              style: style_500_18(ColorManager.blackTextColor.withOpacity(0.8)),
             ),
-            Text(
-              "$bookingPrice\$",
-              style: style_500_14(ColorManager.complementaryColor),
+            SizedBox(height: 12.h,),
+            Row(
+              children: [
+                Text("${locale.paid_amount}:  " ,style: style_500_14(ColorManager.blackTextColor),),
+                Text(
+                  "$paidAmount ${AppConstants.currency}",
+                  style: style_500_16(ColorManager.complementaryColor),
+                ),
+              ],
             ),
-            Text(
-              "$paidAmount\$",
-              style: style_500_14(ColorManager.complementaryColor),
+            Row(
+              children: [
+                Text("${locale.remaining_amount}:  " ,style: style_500_14(ColorManager.blackTextColor),),
+                Text(
+                  "${bookingPrice - paidAmount} ${AppConstants.currency}",
+                  style: style_500_16(ColorManager.complementaryColor),
+                ),
+              ],
             ),
+
           ],
         )
       ],

@@ -51,7 +51,7 @@ class SingleDayWidget extends StatelessWidget {
             actionsPadding: EdgeInsets.only(bottom: 8.h),
             actions: [
               TextButton(
-                child: Text("show full information"),
+                child: Text(locale.show_full_information),
                 onPressed: () async {
                   Get.back();
                   final controller = Get.find<CalendarController>();

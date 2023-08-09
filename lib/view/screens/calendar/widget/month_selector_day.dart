@@ -1,4 +1,5 @@
 import 'package:daif_owner/controller/calendar_controller.dart';
+import 'package:daif_owner/utill/color_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -18,15 +19,13 @@ class MonthSelectorWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(8.r),
           color: Theme
               .of(context)
-              .accentColor),
+              .focusColor),
       child: DropdownButton<Month>(
           value: controller.selectedMonth,
           underline: SizedBox.shrink(),
           iconEnabledColor: Colors.white,
-          dropdownColor: Theme
-              .of(context)
-              .accentColor,
-          icon: const Icon(Icons.expand_more),
+          dropdownColor: Colors.white,
+          icon: const Icon(Icons.expand_more,color: ColorManager.complementaryColor,),
           items: Month.values
               .map((month) =>
               DropdownMenuItem<Month>(
@@ -34,7 +33,7 @@ class MonthSelectorWidget extends StatelessWidget {
                   value: month,
                   child: Text(
                     month.month2Name(context),
-                    style: style_500_12(Colors.white),
+                    style: style_500_12(controller.selectedMonth == month?ColorManager.complementaryColor:ColorManager.blackTextColor),
                   )))
               .toList(),
           onChanged: controller.selectCalendarMonth),

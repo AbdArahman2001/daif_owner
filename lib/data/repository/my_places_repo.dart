@@ -19,7 +19,7 @@ class MyPlacesRepo {
 
     try {
     Response response = await dioClient.delete(
-    "owner/chalet/$chaletId/attachment",
+    "owner/chalets/$chaletId/attachments",
     data:{"ids":ids}
     );
     return ApiResponse.withSuccess(response);
@@ -31,7 +31,7 @@ class MyPlacesRepo {
   updateChalet(ChaletModel chalet) async {
     try {
       Response response = await dioClient.put(
-        "/owner/chalet/${chalet.id}/update",
+        "/owner/chalets/${chalet.id}/update",
         data:chalet.toUpdatedChalet()
       );
       return ApiResponse.withSuccess(response);
@@ -66,7 +66,7 @@ class MyPlacesRepo {
   getChalet(int chaletId) async {
     try {
       Response response = await dioClient.get(
-        "/owner/chalet/$chaletId",
+        "/owner/chalets/$chaletId",
       );
       return ApiResponse.withSuccess(response);
     } catch (e) {
@@ -103,7 +103,7 @@ class MyPlacesRepo {
       FormData data = FormData.fromMap({"images": files});
 
       Response response = await dioClient
-          .post("/owner/chalet/$chaletId/attachment", data: data);
+          .post("/owner/chalets/$chaletId/attachments", data: data);
       return ApiResponse.withSuccess(response);
     } catch (e) {
       return ApiResponse.withError(e);
@@ -113,7 +113,7 @@ class MyPlacesRepo {
   getChaletAttachments(int chaletId) async {
     try {
       Response response =
-          await dioClient.get("/owner/chalet/$chaletId/attachment");
+          await dioClient.get("/owner/chalets/$chaletId/attachments");
       return ApiResponse.withSuccess(response);
     } catch (e) {
       return ApiResponse.withError(e);

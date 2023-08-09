@@ -24,7 +24,7 @@ class DashboardScreen extends StatelessWidget {
     final itemsTitles = [
       locale.bookings,
       locale.calendar,
-      locale.places,
+      locale.chalets,
       locale.profile
     ];
     return GetBuilder<DashBoardController>(builder: (controller){
@@ -38,7 +38,6 @@ class DashboardScreen extends StatelessWidget {
           }
         },
         child: Scaffold(
-            key: controller.scaffoldKey,
             bottomNavigationBar: ClipRRect(
               borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(32.r), topRight: Radius.circular(32.r)),

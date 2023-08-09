@@ -6,7 +6,7 @@ class BookingModel {
   final String customerName;
   final String customerPhoneNumber;
   final String customerIdentity;
-  final double paidAmount;
+   double paidAmount;
   final double bookingPrice;
   final BookingDateModel bookingDate;
   final BookingPeriod bookingPeriod;

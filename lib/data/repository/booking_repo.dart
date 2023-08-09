@@ -12,12 +12,20 @@ class BookingRepo {
   static final instance = BookingRepo._();
   final DioClient dioClient = DioClient.dioClient;
 
-
-
-  updateBookingInfo(int bookingId,BookingModel bookingModel) async {
+  cancelBooking(int bookingId) async {
     try {
-      Response response = await dioClient.put(
-          "/owner/booking/$bookingId/update",data:bookingModel.toJson() );
+      Response response =
+          await dioClient.delete("/owner/bookings/$bookingId/cancel", data: {});
+      return ApiResponse.withSuccess(response);
+    } catch (e) {
+      return ApiResponse.withError(e);
+    }
+  }
+
+  updateBookingInfo(int bookingId, BookingModel bookingModel) async {
+    try {
+      Response response = await dioClient
+          .put("/owner/bookings/$bookingId/update", data: bookingModel.toJson());
       return ApiResponse.withSuccess(response);
     } catch (e) {
       return ApiResponse.withError(e);
@@ -26,8 +34,7 @@ class BookingRepo {
 
   getBookingInfo(int bookingId) async {
     try {
-      Response response = await dioClient.get(
-          "/owner/booking/$bookingId");
+      Response response = await dioClient.get("/owner/bookings/$bookingId");
       return ApiResponse.withSuccess(response);
     } catch (e) {
       return ApiResponse.withError(e);
@@ -36,12 +43,12 @@ class BookingRepo {
 
   getCalendarBookings(
       {required int chaletId,
-        required int year,
-        required int month,
-        required String period}) async {
+      required int year,
+      required int month,
+      required String period}) async {
     try {
       Response response = await dioClient.get(
-          "/owner/chalet/$chaletId/booking/get-calendar?year=$year&month=$month&period=$period");
+          "/owner/chalets/$chaletId/bookings/get-calendar?year=$year&month=$month&period=$period");
       return ApiResponse.withSuccess(response);
     } catch (e) {
       return ApiResponse.withError(e);
@@ -64,7 +71,7 @@ class BookingRepo {
       FormData data = FormData.fromMap({"images": files});
 
       Response response = await dioClient
-          .post("/owner/booking/$bookingId/attachment", data: data);
+          .post("/owner/bookings/$bookingId/attachments", data: data);
       return ApiResponse.withSuccess(response);
     } catch (e) {
       return ApiResponse.withError(e);
@@ -74,16 +81,16 @@ class BookingRepo {
   getBookingAttachments(int bookingId) async {
     try {
       Response response =
-          await dioClient.get("/owner/booking/$bookingId/attachment");
+          await dioClient.get("/owner/bookings/$bookingId/attachments");
       return ApiResponse.withSuccess(response);
     } catch (e) {
       return ApiResponse.withError(e);
     }
   }
 
-  getAllBookings(int status) async {
+  getAllBookings({required int status}) async {
     try {
-      Response response = await dioClient.get("/owner/booking?status=$status");
+      Response response = await dioClient.get("/owner/bookings?status=$status");
       return ApiResponse.withSuccess(response);
     } catch (e) {
       return ApiResponse.withError(e);
@@ -93,7 +100,7 @@ class BookingRepo {
   createNewBooking(BookingModel bookingModel, int chaletId) async {
     try {
       Response response = await dioClient.post(
-          "/owner/chalet/$chaletId/booking/create",
+          "/owner/chalets/$chaletId/bookings/create",
           data: bookingModel.toJson());
       return ApiResponse.withSuccess(response);
     } catch (e) {

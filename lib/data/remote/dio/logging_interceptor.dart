@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:daif_owner/main.dart';
 import 'package:dio/dio.dart';
 
 class LoggingInterceptor extends InterceptorsWrapper {
@@ -19,6 +20,7 @@ class LoggingInterceptor extends InterceptorsWrapper {
 
   @override
   Future onResponse(Response response, ResponseInterceptorHandler handler) async {
+
     log(
         "<-- ${response.statusCode} ${response.requestOptions.method} ${response.requestOptions.path}");
 
@@ -52,4 +54,5 @@ class LoggingInterceptor extends InterceptorsWrapper {
     log("Error status message ${err?.response?.statusMessage}");
     return super.onError(err, handler);
   }
+
 }

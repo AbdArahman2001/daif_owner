@@ -19,7 +19,7 @@ class OtpScreen extends StatelessWidget {
   // @override
   @override
   Widget build(BuildContext context) {
-    final local = AppLocalizations.of(context)!;
+    final locale = AppLocalizations.of(context)!;
     return GetBuilder<AuthController>(builder: (authController) {
       return Scaffold(
           appBar: CustomAppBar(title: "test"),
@@ -57,7 +57,7 @@ class OtpScreen extends StatelessWidget {
                       TextButton(
                         onPressed: authController.resendOtp,
                         child: Text(
-                          "resend otp",
+                          locale.resend_code,
                           style: style_500_18(Theme.of(context).primaryColor),
                         ),
                       ),
@@ -66,14 +66,14 @@ class OtpScreen extends StatelessWidget {
                       ),
                       CustomElevatedButton(
                         onPressed: authController.verifyOtp,
-                        child: const Text("verify"),
+                        child:  Text(locale.verify),
                       ),
                       SizedBox(
                         height: 46.h,
                       ),
                       TextButton(
                           onPressed: () => Get.off(()=>const RegisterScreen()),
-                          child: const Text("register"))
+                          child:  Text(locale.sign_up))
                     ]),
               )));
     });

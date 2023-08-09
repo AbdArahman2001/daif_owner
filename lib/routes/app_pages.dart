@@ -41,7 +41,6 @@ class AppPages {
     GetPage(
         name: Routes.register,
         page: () => const RegisterScreen(),
-        binding: AuthBinding(),
 
     ),
     GetPage(
@@ -53,7 +52,7 @@ class AppPages {
     GetPage(
         name: Routes.dashboard,
         page: () => const DashboardScreen(),
-        binding: DashBoardBinding(),
+       binding: DashBoardBinding(),
     ),
     GetPage(
       name: Routes.addNewChalet,

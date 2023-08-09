@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:developer';
 
+import 'package:daif_owner/data/model/response/remembered_user.dart';
 import 'package:daif_owner/helper/helper.dart';
 import 'package:flutter/material.dart';
 
@@ -30,9 +32,9 @@ class MySharedPref {
         _sharedPreferences.getString(AppConstants.currentLocaleKey);
     // default language is english
     if (langCode == null) {
-      return L10n.supportedLocales["en"] ?? const Locale("en"); // english
+      return L10n.supportedLocales["ar"] ?? const Locale("ar"); // english
     }
-    return L10n.supportedLocales[langCode] ?? const Locale("en");
+    return L10n.supportedLocales[langCode] ?? const Locale("ar");
   }
 
   bool isOnBoardingShown() {
@@ -47,6 +49,26 @@ class MySharedPref {
 
   saveUserInfo(Map<String, dynamic> userInfo) {
     _sharedPreferences.setString(AppConstants.userInfo, jsonEncode(userInfo));
+  }
+
+  rememberUser(RememberedUser user){
+    _sharedPreferences.setString(AppConstants.rememberedUser,json.encode(user.toJson()));
+  }
+
+  RememberedUser? getRememberedUser(){
+    try {
+      final  Object? user = _sharedPreferences.get(
+          AppConstants.rememberedUser);
+      if (user == null) return null;
+      final Map<String,String?> jsonData = Map.from(json.decode(user.toString()));
+      // log("------------------------- ${jsonDecode(jsonData)}");
+
+      return RememberedUser.fromJson(jsonData);
+
+    }catch(e){
+      log("--------------------- error in getting remembered user: $e");
+      return null;
+    }
   }
 
   UserModel? getUserInfo() {

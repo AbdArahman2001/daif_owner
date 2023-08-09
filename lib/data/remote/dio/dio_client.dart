@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:daif_owner/view/basewidget/custom_loading_overlay.dart';
-import 'package:dio/src/response.dart';
 import 'package:dio/dio.dart';
+import 'package:dio/io.dart';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../main.dart';
@@ -23,13 +23,13 @@ class DioClient {
         "Accept": "application/json",
         "Authorization": "Bearer ${userInfo?.accessToken}"
       }
-      ..options.connectTimeout = 60000
-      ..options.receiveTimeout = 60000
+      ..options.connectTimeout = const Duration(milliseconds: 6000)
+      ..options.receiveTimeout = const Duration(milliseconds: 6000)
       ..httpClientAdapter;
     dio.interceptors.add(loggingInterceptor);
+
   }
 
-//"Content-type": "multipart/form-data"
   Future<Response> get(
     String uri, {
     Map<String, dynamic>? queryParameters,

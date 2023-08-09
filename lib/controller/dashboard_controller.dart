@@ -1,4 +1,3 @@
-import 'package:booking_calendar/booking_calendar.dart';
 import 'package:daif_owner/controller/calendar_controller.dart';
 import 'package:daif_owner/controller/profile_controller.dart';
 import 'package:daif_owner/view/screens/profile/screen/profile_screen.dart';
@@ -17,16 +16,12 @@ class DashBoardController extends GetxController {
 
   int pageIndex = 0;
   late Widget currentPage;
-  final GlobalKey<ScaffoldMessengerState> scaffoldKey = GlobalKey();
   bool singleVendor = false;
   late final List<IconData> tabBarIcons;
 
   @override
   void onInit() {
     super.onInit();
-    Get.lazyPut(() => MyPlacesController());
-    Get.lazyPut(() => CalendarController());
-    Get.lazyPut(() => ProfileController());
     Get.put<BookingsController>(BookingsController(), permanent: true);
     currentPage = const BookingsScreen();
     tabBarIcons = [

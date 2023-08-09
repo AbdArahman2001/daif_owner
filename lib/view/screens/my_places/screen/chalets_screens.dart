@@ -26,6 +26,7 @@ class ChaletsScreen extends StatelessWidget {
         floatingActionButton: FloatingActionButton(
           child: Icon(Icons.add),
           onPressed: () {
+            controller.clearData();
             controller.getAllAvailableServices();
             Get.toNamed(Routes.addNewChalet);
           },
@@ -36,7 +37,7 @@ class ChaletsScreen extends StatelessWidget {
                 shrinkWrap: true,
                 primary: false,
                 gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    childAspectRatio: 164 / 195,
+                    childAspectRatio: 164 / 200,
                     mainAxisSpacing: 8.h,
                     crossAxisSpacing: 10.w,
                     crossAxisCount: 2),
@@ -54,7 +55,10 @@ class ChaletsScreen extends StatelessWidget {
                     style: style_600_14(ColorManager.blackTextColor),
                   ),
                   TextButton(
-                      onPressed: () => Get.toNamed(Routes.addNewChalet),
+                      onPressed: () {
+                        controller.getAllAvailableServices();
+                        Get.toNamed(Routes.addNewChalet);
+                      },
                       child: Text(locale.add_first_chalet)),
                 ],
               )),

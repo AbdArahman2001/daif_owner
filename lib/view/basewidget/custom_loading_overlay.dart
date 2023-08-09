@@ -1,3 +1,7 @@
+
+import 'package:daif_owner/localization/my_localizations.dart';
+import 'package:daif_owner/utill/color_manager.dart';
+import 'package:daif_owner/utill/styles_manager.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -16,12 +20,13 @@ Future<Response> showLoadingOverLayForAPI({
   required Future<Response> Function() asyncFunction,
   String? msg,
 }) async {
+  final locale = MyLocalizations.translate(Get.context!);
  return  Get.showOverlay(
     asyncFunction:asyncFunction,
     loadingWidget: Center(
-      child: _getLoadingIndicator(msg: msg),
+      child: _getLoadingIndicator(msg: locale.loading),
     ),
-    opacity: 0.7,
+    opacity: 0.1,
     opacityColor: Colors.black,
   );
 }
@@ -30,6 +35,8 @@ showLoadingOverLay({
   required Future<dynamic> Function() asyncFunction,
   String? msg,
 }) async {
+  final locale = MyLocalizations.translate(Get.context!);
+
   await Get.showOverlay(
     asyncFunction: () async {
       try {
@@ -40,14 +47,14 @@ showLoadingOverLay({
       }
     },
     loadingWidget: Center(
-      child: _getLoadingIndicator(msg: msg),
+      child: _getLoadingIndicator(msg: locale.loading),
     ),
     opacity: 0.7,
     opacityColor: Colors.black,
   );
 }
 
-Widget _getLoadingIndicator({String? msg}) {
+Widget _getLoadingIndicator({required String msg}) {
   return Container(
     padding: EdgeInsets.symmetric(
     vertical: 16.h,horizontal:20.w
@@ -67,7 +74,7 @@ Widget _getLoadingIndicator({String? msg}) {
         SizedBox(
           width: 8.h,
         ),
-        Text(msg ?? "Loading...", style: Get.theme.textTheme.bodyText1),
+        DefaultTextStyle(child:Text(msg), style: style_400_12(ColorManager.blackTextColor)),
       ],
     ),
   );

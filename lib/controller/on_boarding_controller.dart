@@ -31,6 +31,7 @@ class OnBoardingController extends GetxController {
   }
 
   goPreviousPage() {
+    if(pageController.page == 0) return;
     pageController.previousPage(
         duration: const Duration(milliseconds: 300), curve: Curves.easeOut);
   }

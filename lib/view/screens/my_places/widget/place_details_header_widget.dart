@@ -3,6 +3,7 @@ import 'package:daif_owner/data/model/response/attachment_model.dart';
 import 'package:daif_owner/data/model/response/chalet_model.dart';
 import 'package:daif_owner/localization/my_localizations.dart';
 import 'package:daif_owner/routes/app_pages.dart';
+import 'package:daif_owner/utill/app_constants.dart';
 import 'package:daif_owner/utill/styles_manager.dart';
 import 'package:daif_owner/view/screens/my_places/widget/place_images_widget.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +11,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../../../../utill/color_manager.dart';
+import '../../../basewidget/full_screen_image.dart';
 
 class PlaceDetailsHeaderWidget extends StatelessWidget {
   const PlaceDetailsHeaderWidget(
@@ -22,7 +24,7 @@ class PlaceDetailsHeaderWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final locale = MyLocalizations.translate(context);
     return SizedBox(
-      height: 410.h,
+      height: 430.h,
       width: double.infinity,
       child: Stack(
         children: [
@@ -38,7 +40,7 @@ class PlaceDetailsHeaderWidget extends StatelessWidget {
                   images:
                       attachments.map((attachment) => attachment.path).toList(),
                   aspectRatio: 1.3,
-                  onTap: () {},
+                  onTap: (){},
                   imageWidth: 360.w,
                   imageHeight: 360.h,
                   horizontalMargin: 8.w,
@@ -93,8 +95,9 @@ class PlaceDetailsHeaderWidget extends StatelessWidget {
                       children: [
                         Text(
                           chalet.name,
-                          style: Theme.of(context).textTheme.titleSmall,
+                          style: style_600_18(ColorManager.blackTextColor),
                         ),
+                        SizedBox(height: 8.h,),
                         Row(
                           children: [
                             Icon(
@@ -106,7 +109,7 @@ class PlaceDetailsHeaderWidget extends StatelessWidget {
                             ),
                             Text(
                               chalet.address.name,
-                              style: Theme.of(context).textTheme.bodySmall,
+                              style: Theme.of(context).textTheme.bodyMedium,
                             )
                           ],
                         ),
@@ -119,7 +122,7 @@ class PlaceDetailsHeaderWidget extends StatelessWidget {
                         Row(
                           children: [
                             Text(
-                              chalet.price.morning.toString(),
+                              "${chalet.price.morning} ${AppConstants.currency}",
                               style: Theme.of(context).textTheme.titleSmall,
                             ),
                             Text(
@@ -131,7 +134,7 @@ class PlaceDetailsHeaderWidget extends StatelessWidget {
                         Row(
                           children: [
                             Text(
-                              chalet.price.evening.toString(),
+                              "${chalet.price.evening} ${AppConstants.currency}",
                               style: Theme.of(context).textTheme.titleSmall,
                             ),
                             Text(

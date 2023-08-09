@@ -13,21 +13,21 @@ TextStyle _getTextStyle(double fontSize, FontWeight fontWeight, Color color) {
 
 // thin style
 
-TextStyle getThinStyle({required double fontSize, required Color color}) {
-  return _getTextStyle(fontSize, FontWeightManager.thin, color);
-}
+// TextStyle getThinStyle({required double fontSize, required Color color}) {
+//   return _getTextStyle(fontSize, FontWeightManager.thin, color);
+// }
 
 // extraLight style
 
-TextStyle getExtraLightStyle({required double fontSize, required Color color}) {
-  return _getTextStyle(fontSize, FontWeightManager.extraLight, color);
-}
+// TextStyle getExtraLightStyle({required double fontSize, required Color color}) {
+//   return _getTextStyle(fontSize, FontWeightManager.extraLight, color);
+// }
 
 // light style
 
-TextStyle getLightStyle({required double fontSize, required Color color}) {
-  return _getTextStyle(fontSize, FontWeightManager.light, color);
-}
+// TextStyle getLightStyle({required double fontSize, required Color color}) {
+//   return _getTextStyle(fontSize, FontWeightManager.light, color);
+// }
 
 // regular style
 
@@ -54,19 +54,19 @@ TextStyle getBoldStyle({required double fontSize, required Color color}) {
 
 // extraBold style
 
-TextStyle getExtraBoldStyle({required double fontSize, required Color color}) {
-  return _getTextStyle(fontSize, FontWeightManager.extraBold, color);
-}
+// TextStyle getExtraBoldStyle({required double fontSize, required Color color}) {
+//   return _getTextStyle(fontSize, FontWeightManager.extraBold, color);
+// }
 
 // black style
 
-TextStyle getBlackStyle({required double fontSize, required Color color}) {
-  return _getTextStyle(fontSize, FontWeightManager.black, color);
-}
+// TextStyle getBlackStyle({required double fontSize, required Color color}) {
+//   return _getTextStyle(fontSize, FontWeightManager.black, color);
+// }
 
-TextStyle style_900_96(Color color) {
-  return getBlackStyle(fontSize: FontSize.s96, color: color);
-}
+// TextStyle style_900_96(Color color) {
+//   return getBlackStyle(fontSize: FontSize.s96, color: color);
+// }
 
 TextStyle style_700_48(Color color) {
   return getBoldStyle(fontSize: FontSize.s48, color: color);

@@ -11,7 +11,7 @@ ThemeData getLightTheme() {
   return ThemeData(
       // home colors
       primaryColor: ColorManager.primaryColor,
-      accentColor: ColorManager.secondaryColor,
+      focusColor: ColorManager.secondaryColor,
       scaffoldBackgroundColor: ColorManager.backgroundColor,
       splashColor: ColorManager.iconsColor,
       dialogBackgroundColor: ColorManager.whiteColor,
@@ -103,7 +103,7 @@ ThemeData getLightTheme() {
         // enabled border style
         enabledBorder: OutlineInputBorder(
             borderSide:
-                const BorderSide(color: ColorManager.whiteColor, width: 1),
+                const BorderSide(color: ColorManager.grey1, width: 1),
             borderRadius: BorderRadius.all(
                 Radius.circular(ValuesManager.textFieldBorder))),
 

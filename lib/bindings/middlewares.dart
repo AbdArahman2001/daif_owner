@@ -23,7 +23,7 @@ class AuthMiddleware extends GetMiddleware {
     if (tokenType == TokenType.register) {
       return const RouteSettings(name: Routes.otp);
     }
-    if (tokenType == TokenType.login) {
+    if (tokenType == TokenType.login && userInfo!.verify!=null && userInfo!.verify!) {
       return const RouteSettings(name: Routes.dashboard);
     }
     return null; // will not reach at this line.

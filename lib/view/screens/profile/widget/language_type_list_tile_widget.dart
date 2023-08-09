@@ -16,22 +16,16 @@ class LanguageTypeListTileWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          languageType.getLanguageName(context),
-          style: style_600_18(Theme.of(context).primaryColor),
-        ),
-        Radio<LanguageType>(
-          value: languageType,
-          groupValue: langGroup,
-          onChanged: onChanged,
-          activeColor: Theme.of(context).primaryColor,
-          fillColor: MaterialStateProperty.resolveWith(
-              (states) => Theme.of(context).primaryColor),
-        ),
-      ],
+    return RadioListTile<LanguageType>(
+      title: Text(
+        languageType.getLanguageName(context),
+        style: style_600_18(Theme.of(context).primaryColor),
+      ),
+      value: languageType,
+      groupValue: langGroup,
+      onChanged: onChanged,
+      activeColor: Theme.of(context).primaryColor,
+      // tileColor: Theme.of(context).primaryColor,
     );
   }
 }

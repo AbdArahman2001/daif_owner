@@ -20,22 +20,22 @@ class ApiChecker {
         errorMessage = apiResponse.error.toString();
       } else {
         if (apiResponse.error is Exception) {
-          if (apiResponse.error is DioError) {
+          if (apiResponse.error is DioExceptionType) {
             switch (apiResponse.error.type) {
-              case DioErrorType.cancel:
+              case DioExceptionType.cancel:
                 errorMessage = "Request to API server was cancelled";
                 break;
-              case DioErrorType.connectTimeout:
+              case DioExceptionType.connectionTimeout:
                 errorMessage = "Connection timeout with API server";
                 break;
-              case DioErrorType.other:
+              case DioExceptionType.unknown:
                 errorMessage =
                 "Connection to API server failed due to internet connection";
                 break;
-              case DioErrorType.receiveTimeout:
+              case DioExceptionType.receiveTimeout:
                 errorMessage = "Receive timeout in connection with API server";
                 break;
-              case DioErrorType.response:
+              case DioExceptionType.badResponse:
                 final DioError error = apiResponse.error;
                 switch (apiResponse.error.response!.statusCode) {
                   case 401:

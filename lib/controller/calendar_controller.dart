@@ -78,7 +78,7 @@ class CalendarController extends GetxController {
     selectedMonth = Month.values[DateTime.now().month - 1];
     selectedYear = DateTime.now().year;
     final year = DateTime.now().year;
-    availableYears = [year, year + 1];
+    availableYears = [year-1,year, year + 1];
   }
 
   // void getBookedDaysAtMonth() {

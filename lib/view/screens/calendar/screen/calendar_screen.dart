@@ -2,10 +2,12 @@ import 'package:daif_owner/controller/bookings_controller.dart';
 import 'package:daif_owner/controller/calendar_controller.dart';
 import 'package:daif_owner/helper/enum_data.dart';
 import 'package:daif_owner/view/basewidget/custom_app_bar.dart';
+import 'package:daif_owner/view/screens/calendar/widget/calendar_booking_short_info_widget.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:infinite_scroll_pagination/infinite_scroll_pagination.dart';
 
 import '../../../../localization/my_localizations.dart';
 import '../../../../utill/color_manager.dart';
@@ -32,7 +34,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
           return Scaffold(
             appBar: CustomAppBar(
               title: locale.calendar,
-              actions: const SizedBox.shrink(),
+              actions: const [SizedBox.shrink()],
             ),
             body: SingleChildScrollView(
               child: Column(
@@ -95,8 +97,7 @@ class _CalendarScreenState extends State<CalendarScreen> {
                   }),
                   SizedBox(height: 12.h,),
                   Container(
-                    padding:
-                        EdgeInsets.symmetric(vertical: 12.h, horizontal: 12.w),
+                    padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 12.w),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12.r),
                       color: Theme.of(context).dialogBackgroundColor,
@@ -112,9 +113,11 @@ class _CalendarScreenState extends State<CalendarScreen> {
                             SizedBox(
                               width: 8.w,
                             ),
-                            Text(
-                              locale.select_days,
-                              style: Theme.of(context).textTheme.titleMedium,
+                            Expanded(
+                              child: Text(
+                                locale.bookings_calendar,
+                                style: Theme.of(context).textTheme.titleMedium,
+                              ),
                             ),
                             Expanded(child: SizedBox()),
                             MonthSelectorWidget(

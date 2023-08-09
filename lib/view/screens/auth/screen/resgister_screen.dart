@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:daif_owner/controller/auth_controller.dart';
+import 'package:daif_owner/helper/validators.dart';
 import 'package:daif_owner/localization/my_localizations.dart';
 import 'package:daif_owner/routes/app_pages.dart';
 import 'package:daif_owner/utill/assets_manager.dart';
@@ -36,103 +37,113 @@ class _RegisterScreenState extends State<RegisterScreen> {
           return Container(
             padding: EdgeInsets.symmetric(horizontal: 20.w),
             child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Image.asset(
-                    ImageAssets.onBoardingImg1,
-                    fit: BoxFit.cover,
-                    width: 60.w,
-                    height: 60.w,
-                  ),
-                  const SizedBox(
-                    height: 70,
-                  ),
-                  TextFormField(
-                    controller: authController.fullNameController,
-                    keyboardType: TextInputType.visiblePassword,
-                    decoration: InputDecoration(
-                      hintText: locale.full_name,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20.h,
-                  ),
-                  TextFormField(
-                    controller: authController.phoneNumberController,
-                    keyboardType: TextInputType.phone,
-                    decoration: InputDecoration(
-                      hintText: locale.phone_number,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20.h,
-                  ),
-                  TextFormField(
-                    controller: authController.emailController,
-                    keyboardType: TextInputType.visiblePassword,
-                    decoration: InputDecoration(
-                      hintText: locale.email,
-                    ),
-                  ),
-                  SizedBox(
-                    height: 20.h,
-                  ),
-                  TextFormField(
-                    controller: authController.passwordController,
-                    keyboardType: TextInputType.visiblePassword,
-                    decoration: InputDecoration(
-                      hintText: locale.password,
-                    ),
-                  ),
-                  Center(
-                    child: SizedBox(
-                      width: 320.w,
-                      height: 160.w,
-                      child: DottedBorder(
-                        radius: Radius.circular(12.r),
-                        color: ColorManager.grey1,
-                        strokeWidth: 1,
-                        borderType: BorderType.RRect,
-                        dashPattern: <double>[5, 5],
-                        child: Center(
-                            child: Stack(
-                              fit: StackFit.expand,
-                              alignment: Alignment.center,
-                              children: [
-                                authController.profileImage != null
-                                    ? ClipRRect(
-                                  borderRadius: BorderRadius.circular(12.r),
-                                  child: Image.file(
-                                    File(authController.profileImage!.path),
-                                    fit: BoxFit.cover,
-                                  ),
-                                )
-                                    : const SizedBox(),
-                                IconButton(
-                                  icon: const Icon(
-                                    Icons.add,
-                                  ),
-                                  onPressed: () => Helper.openImageSourceDialog(
-                                      context, authController.pickProfileImage),
-
-                                ),
-                              ],
-                            )),
+              child: Form(
+                key: authController.registerFormKey,
+                child: Column(
+                  children: [
+                    Hero(
+                      tag: "logo",
+                      child: Image.asset(
+                        ImageAssets.splashLogo,
+                        fit: BoxFit.cover,
+                        height: 200.h,
+                        width: double.infinity,
                       ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 20.h,
-                  ),
-                  SignUpPartWidget(
-                    signUpFunc: authController.registerAndSendOtp,
-                    isTermsAndConditions:
-                    authController.isTermsAndConditions,
-                    changeTermsAndConditions:
-                    authController.changeTermsAndConditions,
-                  )
+                    SizedBox(height: 30.h,),
+                    TextFormField(
 
-                ],
+                      validator: (input)=>Validators.lengthValidator(input, locale.the_name_is_too_short),
+                      controller: authController.fullNameController,
+                      keyboardType: TextInputType.name,
+                      decoration: InputDecoration(
+                        hintText: locale.full_name,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20.h,
+                    ),
+                    TextFormField(
+                      validator: (input)=>Validators.phoneNumberValidator(input,context),
+                      controller: authController.phoneNumberController,
+                      keyboardType: TextInputType.phone,
+                      decoration: InputDecoration(
+                        hintText: locale.phone_number,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20.h,
+                    ),
+                    TextFormField(
+                      validator: (input)=>Validators.emailValidator(input,context),
+                      controller: authController.emailController,
+                      keyboardType: TextInputType.emailAddress,
+                      decoration: InputDecoration(
+                        hintText: locale.email,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20.h,
+                    ),
+                    TextFormField(
+                      validator: (input)=>Validators.passwordValidator(input,context),
+                      controller: authController.passwordController,
+                      keyboardType: TextInputType.visiblePassword,
+                      decoration: InputDecoration(
+                        hintText: locale.password,
+                      ),
+                    ),
+                    SizedBox(height: 20.h,),
+                    Center(
+                      child: SizedBox(
+                        width: 320.w,
+                        height: 160.w,
+                        child: DottedBorder(
+                          radius: Radius.circular(12.r),
+                          color: ColorManager.grey1,
+                          strokeWidth: 1,
+                          borderType: BorderType.RRect,
+                          dashPattern: <double>[5, 5],
+                          child: Center(
+                              child: Stack(
+                                fit: StackFit.expand,
+                                alignment: Alignment.center,
+                                children: [
+                                  authController.profileImage != null
+                                      ? ClipRRect(
+                                    borderRadius: BorderRadius.circular(12.r),
+                                    child: Image.file(
+                                      File(authController.profileImage!.path),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  )
+                                      : const SizedBox(),
+                                  IconButton(
+                                    icon: const Icon(
+                                      Icons.add,
+                                    ),
+                                    onPressed: () => Helper.openImageSourceDialog(
+                                        context, authController.pickProfileImage),
+
+                                  ),
+                                ],
+                              )),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20.h,
+                    ),
+                    SignUpPartWidget(
+                      signUpFunc: ()=>authController.registerAndSendOtp(context),
+                      isTermsAndConditions:
+                      authController.isTermsAndConditions,
+                      changeTermsAndConditions:
+                      authController.changeTermsAndConditions,
+                    )
+
+                  ],
+                ),
               ),
             ),
           );

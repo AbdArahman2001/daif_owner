@@ -1,4 +1,5 @@
 import 'package:daif_owner/controller/auth_controller.dart';
+import 'package:daif_owner/helper/validators.dart';
 import 'package:daif_owner/localization/my_localizations.dart';
 import 'package:daif_owner/routes/app_pages.dart';
 import 'package:daif_owner/utill/assets_manager.dart';
@@ -32,43 +33,53 @@ class _LoginScreenState extends State<LoginScreen> {
           return Container(
             padding: EdgeInsets.symmetric(horizontal: 20.w),
             child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Image.asset(
-                    ImageAssets.onBoardingImg1,
-                    fit: BoxFit.cover,
-                    width: 60.w,
-                    height: 60.w,
-                  ),
-                  const SizedBox(
-                    height: 70,
-                  ),
-                  TextFormField(
-                    controller: authController.phoneNumberController,
-                    keyboardType: TextInputType.phone,
-                    decoration: InputDecoration(
-                      hintText: locale.phone_number,
+              child: Form(
+                key: authController.loginFormKey,
+                child: Column(
+                  children: [
+                    Hero(
+                      tag: "logo",
+                      child: Image.asset(
+                        ImageAssets.splashLogo,
+                        fit: BoxFit.cover,
+                        height: 200.h,
+                        width: double.infinity,
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    height: 20.h,
-                  ),
-                  TextFormField(
-                    controller: authController.passwordController,
-                    keyboardType: TextInputType.visiblePassword,
-                    decoration: InputDecoration(
-                      hintText: locale.password,
+                    const SizedBox(
+                      height: 70,
                     ),
-                  ),
-                  SizedBox(
-                    height: 20.h,
-                  ),
-                  LoginPartWidget(
-                    loginFunc: authController.login,
-                    isRememberMe: authController.rememberMe,
-                    changeRememberMe: authController.changeRememberMe),
-
-                ],
+                    TextFormField(
+                      validator: (input) =>
+                          Validators.phoneNumberValidator(input, context),
+                      controller: authController.phoneNumberController,
+                      keyboardType: TextInputType.phone,
+                      decoration: InputDecoration(
+                        hintText: locale.phone_number,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20.h,
+                    ),
+                    TextFormField(
+                      validator: (input) =>
+                          Validators.passwordValidator(input, context),
+                      controller: authController.passwordController,
+                      keyboardType: TextInputType.visiblePassword,
+                      decoration: InputDecoration(
+                        hintText: locale.password,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20.h,
+                    ),
+                    LoginPartWidget(
+                      loginFunc: authController.login,
+                      isRememberMe: authController.rememberMe,
+                      changeRememberMe: authController.changeRememberMe,
+                    ),
+                  ],
+                ),
               ),
             ),
           );
