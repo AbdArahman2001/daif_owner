@@ -17,6 +17,7 @@ class ImageAssets {
   static String placeHolderImg = "$_imagesPath/place_holder.jpg";
   static String sliderImg1 = "$_imagesPath/slider_img_1.png";
   static String sliderImg2 = "$_imagesPath/slider_img_2.png";
+  static String noInternetImg ="$_imagesPath/no_internet.png";
 
 }
 

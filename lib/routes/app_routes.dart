@@ -14,6 +14,7 @@ abstract class Routes {
   static const updateChalet = "/updateChalet";
   static const profile = "/profile";
   static const contactUs = "/contactUs";
+  static const noInternetRoute = "/noInternet";
 
 }
 

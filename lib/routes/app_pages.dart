@@ -5,6 +5,7 @@ import 'package:daif_owner/view/screens/my_places/screen/add_or_update_chalet_sc
 import 'package:daif_owner/view/screens/onboarding/screen/on_boarding_screen.dart';
 import 'package:daif_owner/view/screens/profile/screen/contact_us_screen.dart';
 import 'package:daif_owner/view/screens/profile/screen/profile_screen.dart';
+import 'package:daif_owner/view/screens/splash/no_internet_screen.dart';
 import 'package:get/get.dart';
 
 import '../bindings/binding.dart';
@@ -69,6 +70,10 @@ class AppPages {
     GetPage(
       name: Routes.profile,
       page: () => const ProfileScreen(),
+    ),
+    GetPage(
+      name: Routes.noInternetRoute,
+      page: () =>  NoInternetScreen(),
     ),
     GetPage(
       name: Routes.contactUs,

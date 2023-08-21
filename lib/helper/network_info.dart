@@ -2,8 +2,10 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:connectivity/connectivity.dart';
+import 'package:daif_owner/routes/app_pages.dart';
 import 'package:daif_owner/view/basewidget/custom_snackbar.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class NetworkInfo {
   final Connectivity connectivity;
@@ -17,24 +19,31 @@ class NetworkInfo {
 
   static void checkConnectivity() {
     log("-------------------checking connectivity");
-    bool firstTime = true;
     Connectivity()
         .onConnectivityChanged
         .listen((ConnectivityResult result) async {
-      if (!firstTime) {
-        bool isNotConnected;
-        if (result == ConnectivityResult.none) {
-          isNotConnected = true;
-        } else {
-          isNotConnected = !await _updateConnectivityStatus();
-        }
-        isNotConnected
-            ? CustomSnackBar.instance
-                .showCustomSnackBar(title: "connected", message: "connected")
-            : CustomSnackBar.instance.showCustomErrorSnackBar(
-                title: "connectivity", message: "no_connection");
+      bool isNotConnected;
+      if (result == ConnectivityResult.none) {
+        isNotConnected = true;
+      } else {
+        isNotConnected = !(await _updateConnectivityStatus());
       }
-      firstTime = false;
+      log("----------connection status: ${!isNotConnected}");
+      log("----------current route: ${Get.currentRoute}");
+      if (isNotConnected) {
+        CustomSnackBar.instance.showCustomErrorSnackBar(
+            title: "connectivity", message: "no_connection");
+        if (Get.currentRoute != Routes.noInternetRoute) {
+          Get.toNamed(Routes.noInternetRoute);
+        }
+      } else {
+        // CustomSnackBar.instance
+        //     .showCustomSnackBar(title: "connected", message: "connected");
+      if (Get.currentRoute== Routes.noInternetRoute) {
+        Get.back();
+        Get.back();
+      }
+      }
     });
   }
 
