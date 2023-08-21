@@ -79,18 +79,19 @@ class AuthController extends GetxController {
       final otpResult = await _sendOtp();
       if (otpResult) {
         clearData();
-        Get.off(Routes.otp);
+        Get.offNamed(Routes.otp);
       }
     }
   }
 
   Future<bool> verifyOtp() async {
+    final locale = MyLocalizations.translate(Get.context!);
     ApiResponse apiResponse =
         await authRepo.verifyOtp(otpController.text.trim());
     if (apiResponse.response != null &&
         apiResponse.response!.statusCode == 200 &&
         apiResponse.response!.data["error"] == false) {
-      CustomSnackBar.instance.showCustomToast(message: "otp verified");
+      CustomSnackBar.instance.showCustomToast(message: locale.otp_verified);
       userInfo!.verify = true;
       authRepo.saveUserInfo(userInfo!.toLocaleJson(TokenType.login));
       Get.offNamed(Routes.dashboard);
@@ -103,17 +104,20 @@ class AuthController extends GetxController {
 
   resendOtp() async {
     log("----------- resend otp");
+    otpController.clear();
     await _sendOtp();
   }
 
   Future<bool> _sendOtp() async {
+    final locale = MyLocalizations.translate(Get.context!);
+
     // log("user token: ${userInfo?.accessToken}");
     ApiResponse apiResponse = await authRepo.sendOtp();
     // log("sending otp with token: ${userInfo?.accessToken}");
     if (apiResponse.response != null &&
         apiResponse.response!.statusCode == 200 &&
         apiResponse.response!.data["error"] == false) {
-      CustomSnackBar.instance.showCustomToast(message: "otp sent");
+      CustomSnackBar.instance.showCustomToast(message: locale.otp_sent);
       return true;
     } else {
       ApiChecker.checkApi(apiResponse);
@@ -139,7 +143,7 @@ class AuthController extends GetxController {
           jsonEncode(apiResponse.response!.data["data"]).toString()));
       userInfo = UserModel.fromApiJson(data);
       authRepo.saveUserInfo(userInfo!.toLocaleJson(TokenType.register));
-      registerFormKey.currentState!.dispose();
+      // registerFormKey.currentState!.dispose();
       return true;
     } else {
       ApiChecker.checkApi(apiResponse);

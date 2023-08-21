@@ -37,6 +37,7 @@ class BookingsScreen extends StatelessWidget {
               Expanded(
                 child: PageView.builder(
                     controller: controller.pageViewController,
+                    physics: ClampingScrollPhysics(),
                     itemCount: 3,
                     onPageChanged: controller.changeSelectedStatus,
                     itemBuilder: (context, index) {

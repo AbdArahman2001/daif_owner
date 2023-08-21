@@ -43,7 +43,7 @@ class BookingsController extends GetxController {
   Map<int, List<BookingModel>?> cachedBookings = {};
   bool isDataEdited = false;
   final BookingRepo bookingsRepo = BookingRepo.instance;
-  final pageViewController = PageController(initialPage: 0);
+  final pageViewController = PageController(initialPage: 0,keepPage: false);
   late final TextEditingController customerNameController;
   late final TextEditingController phoneNumberController;
   late final TextEditingController customerIdentity;

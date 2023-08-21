@@ -23,6 +23,7 @@ class DashBoardController extends GetxController {
   void onInit() {
     super.onInit();
     Get.put<BookingsController>(BookingsController(), permanent: true);
+    Get.lazyPut<CalendarController>(()=>CalendarController());
     currentPage = const BookingsScreen();
     tabBarIcons = [
       Icons.format_list_bulleted,

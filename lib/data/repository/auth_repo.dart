@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:daif_owner/data/model/response/remembered_user.dart';
 import 'package:daif_owner/view/screens/auth/screen/login_screen.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide Response, FormData,MultipartFile;
 
 import '../../routes/app_pages.dart';
@@ -90,7 +91,7 @@ class AuthRepo {
       return ApiResponse.withError(e);
     }finally{
       MySharedPref.instance.clearUserInfo();
-      Get.off(()=>const LoginScreen());
+      Get.offAll( const LoginScreen());
     }
   }
 
