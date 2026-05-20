@@ -12,9 +12,6 @@ class AppConstants {
   static const  dayfEmail ='mailto:info@dayf-app.com';
   static const  dayfPhoneNumber ='tel:0595130400';
   // API end points
-  // static const  baseUrl = "http://46.101.71.155/api";
-  static const  baseUrl = "https://api.dayf-app.com/api"; // production
-  // static const  baseUrl = "https://apitest.dayf-app.com/api"; // testing
   static const  loginUrl = '/owner/auth/login';
   static const  logout = '/owner/logout';
   static const  registerUrl = '/owner/auth/register';
